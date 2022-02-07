@@ -1,8 +1,9 @@
 package xyz.savvamirzoyan.eposea.ui.core
 
 import androidx.recyclerview.widget.DiffUtil
+import xyz.savvamirzoyan.eposea.core.Model
 
-abstract class CoreDiffCallback<T>(
+abstract class CoreDiffCallback<T : Model.Ui>(
     private val _areContentsTheSame: (T, T) -> Boolean,
     private val _areItemsTheSame: (T, T) -> Boolean,
 ) : DiffUtil.Callback() {

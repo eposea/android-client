@@ -5,8 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import xyz.savvamirzoyan.eposea.core.Model
 
-abstract class CoreRecyclerViewAdapter<T, VH : CoreViewHolder<T>>(
+abstract class CoreRecyclerViewAdapter<T : Model.Ui, VH : CoreViewHolder<T>>(
     private val diffCallback: CoreDiffCallback<T>
 ) : RecyclerView.Adapter<VH>() {
 

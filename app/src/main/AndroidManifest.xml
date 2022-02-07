@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="xyz.savvamirzoyan.eposea">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".ui.App"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:allowBackup="false"
         android:theme="@style/Theme.Eposeaandroid"
         tools:ignore="DataExtractionRules">
         <activity

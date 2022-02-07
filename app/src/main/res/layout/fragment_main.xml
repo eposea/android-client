@@ -5,4 +5,5 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.activity.MainActivity" />
+    tools:context=".ui.activity.MainActivity"
+    tools:listitem="@layout/view_holder_course" />
