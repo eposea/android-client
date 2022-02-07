@@ -42,14 +42,16 @@ interface InstitutionDomainToWithCoursesUiMapper : Mapper<InstitutionDomain, Ins
                                 InstitutionWithCoursesUi.Error(
                                     resourceManager.getString(
                                         R.string.error_api
-                                    )
+                                    ),
+                                    institutionDomain.error.errorMessage
                                 )
                             )
                             is ErrorDomain.OtherError -> result.add(
                                 InstitutionWithCoursesUi.Error(
                                     resourceManager.getString(
                                         R.string.error_other
-                                    )
+                                    ),
+                                    institutionDomain.error.errorMessage
                                 )
                             )
                         }

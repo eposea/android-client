@@ -22,9 +22,24 @@ interface InstitutionDataToDomainMapper : Mapper<InstitutionData, InstitutionDom
             }
             is InstitutionData.Error -> {
                 when (model.error) {
-                    is ErrorData.ApiError -> InstitutionDomain.Error(ErrorDomain.ApiError(model.error))
-                    is ErrorData.NetworkError -> InstitutionDomain.Error(ErrorDomain.ApiError(model.error))
-                    is ErrorData.OtherError -> InstitutionDomain.Error(ErrorDomain.OtherError(model.error))
+                    is ErrorData.ApiError -> InstitutionDomain.Error(
+                        ErrorDomain.ApiError(
+                            model.error,
+                            model.error.errorMessage
+                        )
+                    )
+                    is ErrorData.NetworkError -> InstitutionDomain.Error(
+                        ErrorDomain.ApiError(
+                            model.error,
+                            model.error.errorMessage
+                        )
+                    )
+                    is ErrorData.OtherError -> InstitutionDomain.Error(
+                        ErrorDomain.OtherError(
+                            model.error,
+                            model.error.errorMessage
+                        )
+                    )
                 }
             }
         }

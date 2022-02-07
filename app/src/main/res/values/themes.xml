@@ -12,5 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <item name="android:tint">?attr/colorPrimaryVariant</item>
+
+        <item name="errorTextColor">@color/red_A200</item>
     </style>
 </resources>

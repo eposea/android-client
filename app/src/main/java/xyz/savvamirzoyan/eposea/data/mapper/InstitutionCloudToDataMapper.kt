@@ -26,10 +26,10 @@ interface InstitutionCloudToDataMapper : Mapper<InstitutionCloud, InstitutionDat
         override fun map(models: List<InstitutionCloud>) = models.map { map(it) }
         override fun map(exception: Exception) = InstitutionData.Error(
             when (exception) {
-                is UnknownHostException -> ErrorData.NetworkError(exception)
-                is HttpException -> ErrorData.NetworkError(exception)
-                is SerializationException -> ErrorData.ApiError(exception)
-                else -> ErrorData.OtherError(exception)
+                is UnknownHostException -> ErrorData.NetworkError(exception, exception.message ?: "")
+                is HttpException -> ErrorData.NetworkError(exception, exception.message ?: "")
+                is SerializationException -> ErrorData.ApiError(exception, exception.message ?: "")
+                else -> ErrorData.OtherError(exception, exception.message ?: "")
             }
         )
     }
