@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentMainBinding
+import xyz.savvamirzoyan.eposea.ui.App
+import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsWithCoursesDiffUtil
 import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsWithCoursesRecyclerView
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
@@ -29,6 +31,8 @@ class MainFragment : CoreFragment<InstitutionViewModel>() {
     ): View {
 
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        viewModel = ((activity as CoreActivity).application as App).institutionViewModel
+
         adapter = InstitutionsWithCoursesRecyclerView(
             object : Retry {
                 override fun onRetry() {
@@ -49,8 +53,6 @@ class MainFragment : CoreFragment<InstitutionViewModel>() {
 
         return binding.root
     }
-
-    override fun viewModelClass() = InstitutionViewModel::class.java
 
     private suspend fun institutionsWithCoursesStateListener() {
         viewModel.institutionsStateFlow.collect {

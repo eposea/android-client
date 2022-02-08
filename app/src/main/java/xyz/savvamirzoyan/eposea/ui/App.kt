@@ -1,8 +1,6 @@
 package xyz.savvamirzoyan.eposea.ui
 
 import android.app.Application
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -17,7 +15,6 @@ import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
 import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
 import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToWithCoursesUiMapper
-import xyz.savvamirzoyan.eposea.ui.viewmodel.CoreViewModel
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
 import xyz.savvamirzoyan.eposea.ui.viewmodel.ViewModelsFactory
 
@@ -30,7 +27,8 @@ class App : Application() {
         ignoreUnknownKeys = true
     }
 
-    private lateinit var institutionViewModel: InstitutionViewModel
+    lateinit var institutionViewModel: InstitutionViewModel
+        private set
 
     private val factory by lazy {
         ViewModelsFactory(institutionViewModel)
@@ -70,7 +68,4 @@ class App : Application() {
         // ViewModels
         institutionViewModel = InstitutionViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
     }
-
-    fun <VM : CoreViewModel> viewModel(model: Class<VM>, owner: ViewModelStoreOwner): VM =
-        ViewModelProvider(owner, factory)[model]
 }

@@ -17,10 +17,10 @@ class InstitutionViewModel(
     val institutionsStateFlow: StateFlow<List<InstitutionWithCoursesUi>> = _institutionsStateFlow
 
     init {
-        fetchInstitutions()
+        onRetry()
     }
 
-    private fun fetchInstitutions() {
+    private fun loadInstitutions() {
         viewModelScope.launch {
             _institutionsStateFlow.emit(listOf(InstitutionWithCoursesUi.Loading))
             val institutionWithCoursesUi = institutionDomainToWithCoursesUiMapper.map(interactor.fetchInstitutions())
@@ -29,6 +29,6 @@ class InstitutionViewModel(
     }
 
     fun onRetry() {
-        fetchInstitutions()
+        loadInstitutions()
     }
 }
