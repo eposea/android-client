@@ -16,4 +16,5 @@
     <dimen name="padding_xl">32dp</dimen>
     <dimen name="padding_xxl">40dp</dimen>
     <dimen name="padding_xxxl">48dp</dimen>
+    <dimen name="padding_recyclerview">96dp</dimen>
 </resources>

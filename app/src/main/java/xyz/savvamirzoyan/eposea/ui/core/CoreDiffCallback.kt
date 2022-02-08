@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.DiffUtil
 import xyz.savvamirzoyan.eposea.core.Model
 
 abstract class CoreDiffCallback<T : Model.Ui>(
-    private val _areContentsTheSame: (T, T) -> Boolean,
     private val _areItemsTheSame: (T, T) -> Boolean,
 ) : DiffUtil.Callback() {
 
@@ -20,9 +19,8 @@ abstract class CoreDiffCallback<T : Model.Ui>(
 
     override fun getNewListSize(): Int = newList.size
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return _areContentsTheSame(oldList[oldItemPosition], newList[newItemPosition])
-    }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+        oldList[oldItemPosition] == newList[newItemPosition]
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return _areItemsTheSame(oldList[oldItemPosition], newList[newItemPosition])
