@@ -16,7 +16,6 @@ import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
 import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToWithCoursesUiMapper
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
-import xyz.savvamirzoyan.eposea.ui.viewmodel.ViewModelsFactory
 
 private const val BASE_URL = "https://example.com/"
 
@@ -29,10 +28,6 @@ class App : Application() {
 
     lateinit var institutionViewModel: InstitutionViewModel
         private set
-
-    private val factory by lazy {
-        ViewModelsFactory(institutionViewModel)
-    }
 
     override fun onCreate() {
         super.onCreate()
