@@ -24,6 +24,8 @@ android {
             }
         }
 
+        signingConfig signingConfigs.debug
+
         resConfig "en"
     }
 
@@ -42,7 +44,7 @@ android {
         }
 
         staging {
-            buildConfigField "String", SERVER_URL, '"http://' + "$serverDebugUrl" + '/"'
+            buildConfigField "String", SERVER_URL, '"http://' + "$serverStagingUrl" + '/"'
 
             applicationIdSuffix ".staging"
             versionNameSuffix '-staging'
@@ -52,7 +54,7 @@ android {
         }
 
         release {
-            buildConfigField "String", SERVER_URL, '"http://' + "$serverDebugUrl" + '/"'
+            buildConfigField "String", SERVER_URL, '"http://' + "$serverProdUrl" + '/"'
 
             debuggable = false
             minifyEnabled true
