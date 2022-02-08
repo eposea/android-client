@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import xyz.savvamirzoyan.eposea.BuildConfig
 import xyz.savvamirzoyan.eposea.data.mapper.CourseCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.mapper.InstitutionCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionRepository
@@ -17,7 +18,7 @@ import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
 import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToWithCoursesUiMapper
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
 
-private const val BASE_URL = "https://example.com/"
+private const val BASE_URL = BuildConfig.SERVER_URL
 
 @ExperimentalSerializationApi
 class App : Application() {

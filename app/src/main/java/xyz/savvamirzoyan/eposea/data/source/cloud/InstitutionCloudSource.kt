@@ -5,6 +5,6 @@ import xyz.savvamirzoyan.eposea.data.model.cloud.InstitutionsCloudResponse
 
 interface InstitutionCloudSource {
 
-    @GET("/institutions")
+    @GET("institutions")
     suspend fun fetchInstitutions(): InstitutionsCloudResponse
 }

@@ -29,7 +29,11 @@ android {
 
     buildTypes {
 
+        def SERVER_URL = "SERVER_URL"
+
         debug {
+            buildConfigField "String", SERVER_URL, '"http://' + "$serverDebugUrl" + '/"'
+
             applicationIdSuffix ".debug"
             versionNameSuffix '-debug'
             minifyEnabled false
@@ -38,6 +42,8 @@ android {
         }
 
         staging {
+            buildConfigField "String", SERVER_URL, '"http://' + "$serverDebugUrl" + '/"'
+
             applicationIdSuffix ".staging"
             versionNameSuffix '-staging'
             minifyEnabled false
@@ -46,6 +52,8 @@ android {
         }
 
         release {
+            buildConfigField "String", SERVER_URL, '"http://' + "$serverDebugUrl" + '/"'
+
             debuggable = false
             minifyEnabled true
             shrinkResources true
