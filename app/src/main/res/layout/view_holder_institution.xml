@@ -3,14 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingHorizontal="?android:attr/listPreferredItemPaddingLeft">
 
     <TextView
+        android:layout_marginVertical="@dimen/margin_small"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:id="@+id/textView_institutionTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="?attr/colorOnPrimary"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="ЧНУ им. Петра Могилы" />
 </LinearLayout>
