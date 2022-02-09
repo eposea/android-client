@@ -17,8 +17,7 @@ interface InstitutionDataToDomainMapper : Mapper<InstitutionData, InstitutionDom
 
         override fun map(model: InstitutionData) = when (model) {
             is InstitutionData.Base -> {
-                val courses = courseDataToDomainMapper.map(model.courses)
-                InstitutionDomain.Base(model.id, model.title, courses)
+                InstitutionDomain.Base(model.id, model.title, model.imageUrl)
             }
             is InstitutionData.Error -> {
                 when (model.error) {

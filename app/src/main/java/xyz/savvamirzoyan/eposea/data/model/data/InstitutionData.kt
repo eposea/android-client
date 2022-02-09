@@ -8,7 +8,7 @@ sealed class InstitutionData : Model.Data {
     data class Base(
         val id: String,
         val title: String,
-        val courses: List<CourseData>
+        val imageUrl: String
     ) : InstitutionData()
 
     data class Error(val error: ErrorData) : InstitutionData()

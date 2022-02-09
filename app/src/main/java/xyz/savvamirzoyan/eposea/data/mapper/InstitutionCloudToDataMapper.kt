@@ -18,10 +18,7 @@ interface InstitutionCloudToDataMapper : Mapper<InstitutionCloud, InstitutionDat
         private val courseCloudToDataMapper: CourseCloudToDataMapper
     ) : InstitutionCloudToDataMapper {
 
-        override fun map(model: InstitutionCloud): InstitutionData {
-            val courses = courseCloudToDataMapper.map(model.courses)
-            return InstitutionData.Base(model.id, model.title, courses)
-        }
+        override fun map(model: InstitutionCloud) = InstitutionData.Base(model.id, model.title, model.imageUrl)
 
         override fun map(models: List<InstitutionCloud>) = models.map { map(it) }
         override fun map(exception: Exception) = InstitutionData.Error(

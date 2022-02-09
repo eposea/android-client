@@ -12,9 +12,27 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurface</item>
-        <item name="android:tint">?attr/colorPrimaryDark</item>
 
-        <item name="errorTextColor">@color/red_A200</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="errorTextColor">@color/red_A200</item>
+    </style>
+
+    <style name="ColoredIcon">
+        <item name="android:tint">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="DrawableTextView" parent="Widget.AppCompat.TextView">
+        <item name="drawableTint">?attr/colorPrimaryVariant</item>
+        <item name="drawableTintMode">multiply</item>
+    </style>
+
+    <style name="DrawableTextViewError" parent="Widget.AppCompat.TextView">
+        <item name="drawableTint">?attr/colorError</item>
+        <item name="drawableTintMode">multiply</item>
     </style>
 </resources>

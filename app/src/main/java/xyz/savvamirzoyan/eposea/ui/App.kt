@@ -15,7 +15,7 @@ import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
 import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
-import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToWithCoursesUiMapper
+import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToUiMapper
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
 
 private const val BASE_URL = BuildConfig.SERVER_URL
@@ -53,7 +53,7 @@ class App : Application() {
         val institutionCloudToDataMapper = InstitutionCloudToDataMapper.Base(courseCloudToDataMapper)
         val courseDataToDomainMapper = CourseDataToDomainMapper.Base()
         val institutionDataToDomainMapper = InstitutionDataToDomainMapper.Base(courseDataToDomainMapper)
-        val institutionDomainToWithCoursesUiMapper = InstitutionDomainToWithCoursesUiMapper.Base(resourceManager)
+        val institutionDomainToWithCoursesUiMapper = InstitutionDomainToUiMapper.Base(resourceManager)
 
         // Repository
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)

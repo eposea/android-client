@@ -8,5 +8,5 @@ import xyz.savvamirzoyan.eposea.core.Model
 data class InstitutionCloud(
     val id: String,
     @SerialName("name") val title: String,
-    val courses: List<CourseCloud>
+    val imageUrl: String
 ) : Model.Cloud

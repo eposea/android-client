@@ -1,21 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingHorizontal="?android:attr/listPreferredItemPaddingLeft">
+    android:layout_marginHorizontal="@dimen/margin_standard"
+    android:layout_marginTop="@dimen/margin_standard">
 
-    <TextView
-        android:layout_marginVertical="@dimen/margin_small"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:id="@+id/textView_institutionTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="?attr/colorOnPrimary"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:text="ЧНУ им. Петра Могилы" />
-</LinearLayout>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingVertical="@dimen/padding_standard">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView_institutionLogo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/RoundedImage"
+            tools:src="@drawable/ic_launcher_foreground" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_institutionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textSize="18sp"
+                tools:text="ЧНУ им. Петра Могилы" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_tasksDone"
+                    style="@style/DrawableTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_standard"
+                    android:drawablePadding="@dimen/padding_small"
+                    android:gravity="center"
+                    app:drawableEndCompat="@drawable/ic_round_done_24"
+                    tools:text="42/100" />
+
+                <TextView
+                    android:id="@+id/textView_urgentTasks"
+                    style="@style/DrawableTextViewError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/padding_small"
+                    android:gravity="center"
+                    app:drawableEndCompat="@drawable/ic_round_alarm_24"
+                    tools:text="3" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
