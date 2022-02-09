@@ -28,6 +28,13 @@ class InstitutionViewModel(
         }
     }
 
+    fun onUpdate() {
+        viewModelScope.launch {
+            val institutionWithCoursesUi = institutionDomainToUiMapper.map(interactor.fetchInstitutions())
+            _institutionsStateFlow.emit(institutionWithCoursesUi)
+        }
+    }
+
     fun onRetry() {
         loadInstitutions()
     }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.Retry
-import xyz.savvamirzoyan.eposea.databinding.FragmentMainBinding
+import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionsBinding
 import xyz.savvamirzoyan.eposea.ui.App
 import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsWithCoursesDiffUtil
@@ -20,9 +20,9 @@ import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsWithCoursesRecyclerV
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
 
 @ExperimentalSerializationApi
-class MainFragment : CoreFragment<InstitutionViewModel>() {
+class InstitutionsFragment : CoreFragment<InstitutionViewModel>() {
 
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentInstitutionsBinding
     private lateinit var adapter: InstitutionsWithCoursesRecyclerView
 
     override fun onCreateView(
@@ -30,7 +30,7 @@ class MainFragment : CoreFragment<InstitutionViewModel>() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentInstitutionsBinding.inflate(inflater, container, false)
         viewModel = ((activity as CoreActivity).application as App).institutionViewModel
 
         adapter = InstitutionsWithCoursesRecyclerView(
@@ -42,8 +42,12 @@ class MainFragment : CoreFragment<InstitutionViewModel>() {
             InstitutionsWithCoursesDiffUtil()
         )
 
-        binding.root.adapter = adapter
-        binding.root.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewInstitutions.adapter = adapter
+        binding.recyclerViewInstitutions.layoutManager = LinearLayoutManager(context)
+
+        binding.root.setOnRefreshListener {
+            viewModel.onUpdate()
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -57,6 +61,7 @@ class MainFragment : CoreFragment<InstitutionViewModel>() {
     private suspend fun institutionsWithCoursesStateListener() {
         viewModel.institutionsStateFlow.collect {
             adapter.update(it)
+            binding.root.isRefreshing = false
         }
     }
 }
