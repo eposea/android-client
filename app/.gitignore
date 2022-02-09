@@ -1,2 +1,5 @@
 /build
 google-services.jspn
+debug/google-services.json
+staging/google-services.json
+release/google-services.json
