@@ -11,7 +11,7 @@
         <item name="colorSecondaryVariant">@color/light_yellow_A200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="android:tint">?attr/colorPrimaryDark</item>
 
         <item name="errorTextColor">@color/red_A200</item>

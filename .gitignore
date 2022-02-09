@@ -20,3 +20,4 @@ Dependency/*
 /app/local.properties
 /.idea/
 /gradle/wrapper/
+google-services.json
