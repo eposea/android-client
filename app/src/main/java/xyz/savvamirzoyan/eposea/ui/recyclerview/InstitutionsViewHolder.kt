@@ -30,8 +30,6 @@ sealed class InstitutionsViewHolder(view: View) : CoreViewHolder<InstitutionUi>(
         override fun bind(item: InstitutionUi.Base) {
             Glide.with(binding.root).load(item.imageUrl).into(binding.imageViewInstitutionLogo)
             binding.textViewInstitutionTitle.text = item.title
-            binding.textViewTasksDone.text = item.tasksDone
-            binding.textViewUrgentTasks.text = item.urgentTasks
         }
     }
 
@@ -39,10 +37,8 @@ sealed class InstitutionsViewHolder(view: View) : CoreViewHolder<InstitutionUi>(
         private val binding = ViewHolderInstitutionNoImageBinding.bind(view)
 
         override fun bind(item: InstitutionUi.BaseNoImage) {
-            binding.textViewInstitutionFirstLetter.text = item.capitalLetter.toString()
+            binding.textViewInstitutionInitials.text = item.initials
             binding.textViewInstitutionTitle.text = item.title
-            binding.textViewTasksDone.text = item.tasksDone
-            binding.textViewUrgentTasks.text = item.urgentTasks
         }
     }
 

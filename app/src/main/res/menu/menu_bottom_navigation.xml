@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/institutionsFragment"
+        android:icon="@drawable/ic_round_business_24"
+        android:title="@string/menu_item_institutions" />
+
+    <item
+        android:id="@+id/coursesFragment"
+        android:icon="@drawable/ic_round_all_inbox_24"
+        android:title="@string/menu_item_courses" />
+
+    <item
+        android:id="@+id/chatFragment"
+        android:icon="@drawable/ic_round_chat_24"
+        android:title="@string/menu_item_messages" />
+</menu>

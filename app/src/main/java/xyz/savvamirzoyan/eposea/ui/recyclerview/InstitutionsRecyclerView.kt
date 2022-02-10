@@ -32,6 +32,7 @@ class InstitutionsWithCoursesRecyclerView(
                 InstitutionsViewHolder.InstitutionNoImage(R.layout.view_holder_institution_no_image.makeView(parent))
             TYPE_LOADING ->
                 InstitutionsViewHolder.Loading(R.layout.view_holder_loading.makeView(parent))
-            else -> InstitutionsViewHolder.Error(retry, R.layout.view_holder_error.makeView(parent))
+            else ->
+                InstitutionsViewHolder.Error(retry, R.layout.view_holder_error.makeView(parent))
         }
 }

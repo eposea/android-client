@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.navigation.NavigationView
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.R
 
@@ -13,15 +14,14 @@ class MainActivity : CoreActivity() {
 
     private val navController by lazy { findNavController(R.id.main_nav_host_fragment) }
     private val appBarConfiguration by lazy { AppBarConfiguration(navController.graph) }
+    private val bottomNavigationView by lazy {
+        findViewById<BottomNavigationView>(R.id.navigation_view)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        NavigationUI.setupWithNavController(
-            findViewById<NavigationView>(R.id.navigation_view),
-            navController
-        )
+        bottomNavigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

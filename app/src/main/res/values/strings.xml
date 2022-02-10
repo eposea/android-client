@@ -3,4 +3,7 @@
     <string name="loading">Loading…</string>
     <string name="error_api">Server is unavailable\nPlease check connection with Internet or try again</string>
     <string name="error_other">Something bad happened with app\nPlease try again later</string>
+    <string name="menu_item_institutions">Institutions</string>
+    <string name="menu_item_messages">Messages</string>
+    <string name="menu_item_courses">Courses</string>
 </resources>

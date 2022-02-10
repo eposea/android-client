@@ -7,16 +7,12 @@ sealed class InstitutionUi : Model.Ui {
         val id: String,
         val title: String,
         val imageUrl: String,
-        val tasksDone: String,
-        val urgentTasks: String
     ) : InstitutionUi()
 
     data class BaseNoImage(
         val id: String,
         val title: String,
-        val capitalLetter: Char,
-        val tasksDone: String,
-        val urgentTasks: String
+        val initials: String
     ) : InstitutionUi()
 
     data class Error(val error: String, val errorMessage: String) : InstitutionUi()
