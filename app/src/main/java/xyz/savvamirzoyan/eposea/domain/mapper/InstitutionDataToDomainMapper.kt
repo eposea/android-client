@@ -11,9 +11,7 @@ interface InstitutionDataToDomainMapper : Mapper<InstitutionData, InstitutionDom
     fun map(model: InstitutionData): InstitutionDomain
     fun map(models: List<InstitutionData>): List<InstitutionDomain>
 
-    class Base(
-        private val courseDataToDomainMapper: CourseDataToDomainMapper
-    ) : InstitutionDataToDomainMapper {
+    class Base : InstitutionDataToDomainMapper {
 
         override fun map(model: InstitutionData) = when (model) {
             is InstitutionData.Base -> {

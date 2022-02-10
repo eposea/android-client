@@ -52,7 +52,7 @@ class App : Application() {
         val courseCloudToDataMapper = CourseCloudToDataMapper.Base()
         val institutionCloudToDataMapper = InstitutionCloudToDataMapper.Base(courseCloudToDataMapper)
         val courseDataToDomainMapper = CourseDataToDomainMapper.Base()
-        val institutionDataToDomainMapper = InstitutionDataToDomainMapper.Base(courseDataToDomainMapper)
+        val institutionDataToDomainMapper = InstitutionDataToDomainMapper.Base()
         val institutionDomainToWithCoursesUiMapper = InstitutionDomainToUiMapper.Base(resourceManager)
 
         // Repository

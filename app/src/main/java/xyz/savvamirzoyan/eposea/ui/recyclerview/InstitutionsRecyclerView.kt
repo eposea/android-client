@@ -8,8 +8,9 @@ import xyz.savvamirzoyan.eposea.ui.core.CoreRecyclerViewAdapter
 import xyz.savvamirzoyan.eposea.ui.model.InstitutionUi
 
 private const val TYPE_INSTITUTION = 0
-private const val TYPE_LOADING = 1
-private const val TYPE_ERROR = 2
+private const val TYPE_INSTITUTION_NO_IMAGE = 1
+private const val TYPE_LOADING = 2
+private const val TYPE_ERROR = 3
 
 class InstitutionsWithCoursesRecyclerView(
     private val retry: Retry,
@@ -19,6 +20,7 @@ class InstitutionsWithCoursesRecyclerView(
     override fun getItemViewType(position: Int) = when (items[position]) {
         is InstitutionUi.Error -> TYPE_ERROR
         is InstitutionUi.Base -> TYPE_INSTITUTION
+        is InstitutionUi.BaseNoImage -> TYPE_INSTITUTION_NO_IMAGE
         InstitutionUi.Loading -> TYPE_LOADING
     }
 
@@ -26,7 +28,10 @@ class InstitutionsWithCoursesRecyclerView(
         when (viewType) {
             TYPE_INSTITUTION ->
                 InstitutionsViewHolder.Institution(R.layout.view_holder_institution.makeView(parent))
-            TYPE_LOADING -> InstitutionsViewHolder.Loading(R.layout.view_holder_loading.makeView(parent))
+            TYPE_INSTITUTION_NO_IMAGE ->
+                InstitutionsViewHolder.InstitutionNoImage(R.layout.view_holder_institution_no_image.makeView(parent))
+            TYPE_LOADING ->
+                InstitutionsViewHolder.Loading(R.layout.view_holder_loading.makeView(parent))
             else -> InstitutionsViewHolder.Error(retry, R.layout.view_holder_error.makeView(parent))
         }
 }

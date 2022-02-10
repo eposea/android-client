@@ -17,13 +17,25 @@ interface InstitutionDomainToUiMapper : Mapper<InstitutionDomain, InstitutionUi>
     ) : InstitutionDomainToUiMapper {
 
         override fun map(model: InstitutionDomain) = when (model) {
-            is InstitutionDomain.Base -> InstitutionUi.Base(
-                model.id,
-                model.title,
-                model.imageUrl,
-                "${(0..50).random()}/${(50..100).random()}", // TODO: Replace with resources
-                (1..5).random().toString()
-            )
+            is InstitutionDomain.Base -> {
+                if (model.imageUrl != null) {
+                    InstitutionUi.Base(
+                        model.id,
+                        model.title,
+                        model.imageUrl,
+                        "${(0..50).random()}/${(50..100).random()}", // TODO: Replace with resources
+                        (1..5).random().toString()
+                    )
+                } else {
+                    InstitutionUi.BaseNoImage(
+                        model.id,
+                        model.title,
+                        model.title.first().uppercaseChar(),
+                        "${(0..50).random()}/${(50..100).random()}", // TODO: Replace with resources
+                        (1..5).random().toString()
+                    )
+                }
+            }
             is InstitutionDomain.Error -> {
                 when (model.error) {
                     is ErrorDomain.ApiError -> InstitutionUi.Error(

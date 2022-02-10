@@ -8,7 +8,7 @@ sealed class InstitutionDomain : Model.Domain {
     data class Base(
         val id: String,
         val title: String,
-        val imageUrl: String
+        val imageUrl: String?
     ) : InstitutionDomain()
 
     data class Error(val error: ErrorDomain) : InstitutionDomain()
