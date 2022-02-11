@@ -13,13 +13,11 @@ interface InstitutionRepository {
         private val institutionCloudToDataMapper: InstitutionCloudToDataMapper
     ) : InstitutionRepository {
 
-        override suspend fun fetchInstitutions(): List<InstitutionData> {
-            return try {
-                val institutionCloudResponse = institutionCloudSource.fetchInstitutions()
-                institutionCloudToDataMapper.map(institutionCloudResponse.institutions)
-            } catch (e: Exception) {
-                listOf(institutionCloudToDataMapper.map(e))
-            }
+        override suspend fun fetchInstitutions(): List<InstitutionData> = try {
+            val institutionCloudResponse = institutionCloudSource.fetchInstitutions()
+            institutionCloudToDataMapper.map(institutionCloudResponse.institutions)
+        } catch (e: Exception) {
+            listOf(institutionCloudToDataMapper.map(e))
         }
     }
 }

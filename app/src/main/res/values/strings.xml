@@ -6,4 +6,6 @@
     <string name="menu_item_institutions">Institutions</string>
     <string name="menu_item_messages">Messages</string>
     <string name="menu_item_courses">Courses</string>
+    <string name="description">Description</string>
+    <string name="error">Error</string>
 </resources>

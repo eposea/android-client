@@ -10,26 +10,37 @@ import retrofit2.Retrofit
 import xyz.savvamirzoyan.eposea.BuildConfig
 import xyz.savvamirzoyan.eposea.data.mapper.CourseCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.mapper.InstitutionCloudToDataMapper
+import xyz.savvamirzoyan.eposea.data.mapper.InstitutionInfoCloudToDataMapper
+import xyz.savvamirzoyan.eposea.data.repository.InstitutionInfoRepository
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionRepository
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
+import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionInfoCloudSource
+import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInfoInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
 import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
+import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionInfoDataToDomainMapper
 import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToUiMapper
-import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
+import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionInfoDomainToUiMapper
+import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionInfoToolbarDomainToUiMapper
+import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionInfoViewModel
+import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
 
 private const val BASE_URL = BuildConfig.SERVER_URL
 
-@ExperimentalSerializationApi
 class App : Application() {
 
     private val json = Json {
         ignoreUnknownKeys = true
     }
 
-    lateinit var institutionViewModel: InstitutionViewModel
+    lateinit var institutionsViewModel: InstitutionsViewModel
         private set
 
+    lateinit var institutionInfoViewModel: InstitutionInfoViewModel
+        private set
+
+    @OptIn(ExperimentalSerializationApi::class)
     override fun onCreate() {
         super.onCreate()
 
@@ -47,6 +58,7 @@ class App : Application() {
 
         // Sources
         val institutionCloudSource = retrofit.create(InstitutionCloudSource::class.java)
+        val institutionInfoCloudSource = retrofit.create(InstitutionInfoCloudSource::class.java)
 
         // Mappers
         val courseCloudToDataMapper = CourseCloudToDataMapper.Base()
@@ -54,14 +66,30 @@ class App : Application() {
         val courseDataToDomainMapper = CourseDataToDomainMapper.Base()
         val institutionDataToDomainMapper = InstitutionDataToDomainMapper.Base()
         val institutionDomainToWithCoursesUiMapper = InstitutionDomainToUiMapper.Base(resourceManager)
+        val institutionInfoCloudToDataMapper = InstitutionInfoCloudToDataMapper.Base()
+        val institutionInfoDataToDomainMapper = InstitutionInfoDataToDomainMapper.Base()
+        val institutionInfoToolbarDomainToUiMapper = InstitutionInfoToolbarDomainToUiMapper.Base(resourceManager)
+        val institutionInfoDomainToUiMapper = InstitutionInfoDomainToUiMapper.Base(resourceManager)
 
         // Repository
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)
+        val institutionInfoRepository = InstitutionInfoRepository.Base(
+            institutionInfoCloudSource, institutionInfoCloudToDataMapper
+        )
 
         // Interactors
         val institutionInteractor = InstitutionInteractor.Base(institutionRepository, institutionDataToDomainMapper)
+        val institutionInfoInteractor = InstitutionInfoInteractor.Base(
+            institutionInfoRepository, institutionInfoDataToDomainMapper
+        )
 
         // ViewModels
-        institutionViewModel = InstitutionViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
+        institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
+        institutionInfoViewModel = InstitutionInfoViewModel(
+            institutionInfoInteractor,
+            institutionInfoToolbarDomainToUiMapper,
+            institutionInfoDomainToUiMapper,
+            resourceManager
+        )
     }
 }

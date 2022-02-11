@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/margin_standard"
     android:layout_marginTop="@dimen/margin_standard"
     android:clickable="true"
     android:focusable="true"
@@ -17,6 +16,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:importantForAccessibility="no"
             android:id="@+id/imageView_institutionLogo"
             android:layout_width="match_parent"
             android:layout_height="168dp"

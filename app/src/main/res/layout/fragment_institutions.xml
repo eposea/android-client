@@ -11,5 +11,6 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingBottom="@dimen/padding_recyclerview"
+        android:paddingHorizontal="@dimen/padding_standard"
         tools:listitem="@layout/view_holder_institution" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

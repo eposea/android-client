@@ -7,23 +7,24 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
+import xyz.savvamirzoyan.eposea.core.Clicker
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionsBinding
 import xyz.savvamirzoyan.eposea.ui.App
 import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
-import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsWithCoursesDiffUtil
-import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsWithCoursesRecyclerView
-import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionViewModel
+import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsDiffUtil
+import xyz.savvamirzoyan.eposea.ui.model.InstitutionUi
+import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsRecyclerView
+import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
 
-@ExperimentalSerializationApi
-class InstitutionsFragment : CoreFragment<InstitutionViewModel>() {
+class InstitutionsFragment : CoreFragment<InstitutionsViewModel>() {
 
     private lateinit var binding: FragmentInstitutionsBinding
-    private lateinit var adapter: InstitutionsWithCoursesRecyclerView
+    private lateinit var adapter: InstitutionsRecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +32,25 @@ class InstitutionsFragment : CoreFragment<InstitutionViewModel>() {
     ): View {
 
         binding = FragmentInstitutionsBinding.inflate(inflater, container, false)
-        viewModel = ((activity as CoreActivity).application as App).institutionViewModel
+        viewModel = ((activity as CoreActivity).application as App).institutionsViewModel
 
-        adapter = InstitutionsWithCoursesRecyclerView(
+        adapter = InstitutionsRecyclerView(
             object : Retry {
                 override fun onRetry() {
                     viewModel.onRetry()
                 }
             },
-            InstitutionsWithCoursesDiffUtil()
+            object : Clicker<InstitutionUi.Base> {
+                override fun onClick(item: InstitutionUi.Base) {
+                    viewModel.onClick(item)
+                }
+            },
+            object : Clicker<InstitutionUi.BaseNoImage> {
+                override fun onClick(item: InstitutionUi.BaseNoImage) {
+                    viewModel.onClick(item)
+                }
+            },
+            InstitutionsDiffUtil()
         )
 
         binding.recyclerViewInstitutions.adapter = adapter
@@ -51,17 +62,29 @@ class InstitutionsFragment : CoreFragment<InstitutionViewModel>() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                institutionsWithCoursesStateListener()
+                institutionsStateListener()
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                navigationStateListener()
             }
         }
 
         return binding.root
     }
 
-    private suspend fun institutionsWithCoursesStateListener() {
+    private suspend fun institutionsStateListener() {
         viewModel.institutionsStateFlow.collect {
             adapter.update(it)
             binding.root.isRefreshing = false
+        }
+    }
+
+    private suspend fun navigationStateListener() {
+        viewModel.navigationStateFlow.collect { institutionId: String ->
+            val action = InstitutionsFragmentDirections.toInstitutionInfoFragment(institutionId)
+            findNavController().navigate(action)
         }
     }
 }

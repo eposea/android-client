@@ -9,5 +9,23 @@
         android:id="@+id/institutionsFragment"
         android:name="xyz.savvamirzoyan.eposea.ui.fragment.InstitutionsFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_institutions" />
+        tools:layout="@layout/fragment_institutions">
+        <action
+            android:id="@+id/to_institutionInfoFragment"
+            app:destination="@id/institutionInfoFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/institutionInfoFragment"
+        android:name="xyz.savvamirzoyan.eposea.ui.fragment.InstitutionInfoFragment"
+        android:label="fragment_institution_info"
+        tools:layout="@layout/fragment_institution_info">
+        <argument
+            android:name="institutionId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

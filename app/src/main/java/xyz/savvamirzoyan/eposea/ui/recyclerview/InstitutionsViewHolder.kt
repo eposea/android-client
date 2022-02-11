@@ -2,6 +2,7 @@ package xyz.savvamirzoyan.eposea.ui.recyclerview
 
 import android.view.View
 import com.bumptech.glide.Glide
+import xyz.savvamirzoyan.eposea.core.Clicker
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.ViewHolderErrorBinding
 import xyz.savvamirzoyan.eposea.databinding.ViewHolderInstitutionBinding
@@ -24,21 +25,31 @@ sealed class InstitutionsViewHolder(view: View) : CoreViewHolder<InstitutionUi>(
     open fun bind(item: InstitutionUi.Base) {}
     open fun bind(item: InstitutionUi.BaseNoImage) {}
 
-    class Institution(view: View) : InstitutionsViewHolder(view) {
+    class Institution(
+        private val clickListener: Clicker<InstitutionUi.Base>,
+        view: View
+    ) : InstitutionsViewHolder(view) {
         private val binding = ViewHolderInstitutionBinding.bind(view)
 
         override fun bind(item: InstitutionUi.Base) {
             Glide.with(binding.root).load(item.imageUrl).into(binding.imageViewInstitutionLogo)
             binding.textViewInstitutionTitle.text = item.title
+
+            binding.root.setOnClickListener { clickListener.onClick(item) }
         }
     }
 
-    class InstitutionNoImage(view: View) : InstitutionsViewHolder(view) {
+    class InstitutionNoImage(
+        private val clickListener: Clicker<InstitutionUi.BaseNoImage>,
+        view: View
+    ) : InstitutionsViewHolder(view) {
         private val binding = ViewHolderInstitutionNoImageBinding.bind(view)
 
         override fun bind(item: InstitutionUi.BaseNoImage) {
             binding.textViewInstitutionInitials.text = item.initials
             binding.textViewInstitutionTitle.text = item.title
+
+            binding.root.setOnClickListener { clickListener.onClick(item) }
         }
     }
 
