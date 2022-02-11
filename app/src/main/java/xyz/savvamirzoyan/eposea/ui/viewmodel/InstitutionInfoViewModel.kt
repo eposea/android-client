@@ -19,8 +19,6 @@ class InstitutionInfoViewModel(
     private val resourceManager: ResourceManager
 ) : CoreViewModel() {
 
-    private var institutionId: String = ""
-
     private val _institutionToolbarInfoFlow =
         MutableStateFlow<InstitutionInfoToolbarUi>(InstitutionInfoToolbarUi.Loading(resourceManager.getString(R.string.loading)))
     val institutionToolbarInfoFlow: StateFlow<InstitutionInfoToolbarUi> = _institutionToolbarInfoFlow
@@ -28,20 +26,7 @@ class InstitutionInfoViewModel(
     private val _institutionInfoFlow = MutableStateFlow<List<InstitutionInfoUi>>(listOf(InstitutionInfoUi.Loading))
     val institutionInfoFlow: StateFlow<List<InstitutionInfoUi>> = _institutionInfoFlow
 
-    fun fetchInstitutionInfo(_institutionId: String) {
-        this.institutionId = _institutionId
-
-        viewModelScope.launch {
-            val institutionInfoDomain = institutionInfoInteractor.fetchInstitutionInfo(institutionId)
-            val institutionInfoToolbarUi = institutionInfoToolbarDomainToUiMapper.map(institutionInfoDomain)
-            val institutionInfoUi = institutionInfoDomainToUiMapper.map(institutionInfoDomain)
-
-            _institutionToolbarInfoFlow.emit(institutionInfoToolbarUi)
-            _institutionInfoFlow.emit(institutionInfoUi)
-        }
-    }
-
-    fun onRetry() {
+    fun fetchInstitutionInfo(institutionId: String) {
         viewModelScope.launch {
             _institutionToolbarInfoFlow.emit(InstitutionInfoToolbarUi.Loading(resourceManager.getString(R.string.loading)))
             _institutionInfoFlow.emit(listOf(InstitutionInfoUi.Loading))

@@ -39,7 +39,7 @@ class InstitutionInfoFragment : CoreFragment<InstitutionInfoViewModel>() {
         adapter = InstitutionInfoRecyclerView(
             object : Retry {
                 override fun onRetry() {
-                    viewModel.onRetry()
+                    viewModel.fetchInstitutionInfo(args.institutionId)
                 }
             },
             InstitutionInfoUiDiffUtil()
@@ -64,6 +64,10 @@ class InstitutionInfoFragment : CoreFragment<InstitutionInfoViewModel>() {
             findNavController().navigateUp()
         }
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.fetchInstitutionInfo(args.institutionId)
+        }
+
         viewModel.fetchInstitutionInfo(args.institutionId)
 
         return binding.root
@@ -75,6 +79,7 @@ class InstitutionInfoFragment : CoreFragment<InstitutionInfoViewModel>() {
                 .load(it.imageUrl)
                 .into(binding.imageViewInstitutionLogo)
             binding.collapsingToolbar.title = it.title
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
