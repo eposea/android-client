@@ -1,9 +1,15 @@
 package xyz.savvamirzoyan.eposea.domain.model
 
 import xyz.savvamirzoyan.eposea.core.Model
+import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 
-data class CourseDomain(
-    val id: String,
-    val title: String,
-    val description: String
-) : Model.Domain
+sealed class CourseDomain : Model.Domain {
+
+    class Base(
+        val id: String,
+        val title: String,
+        val teachers: List<String> // Maybe should be a list of objects)
+    ) : CourseDomain()
+
+    class Error(val error: ErrorDomain) : CourseDomain()
+}

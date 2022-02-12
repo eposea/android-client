@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import xyz.savvamirzoyan.eposea.core.Clicker
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionsBinding
@@ -55,21 +51,10 @@ class InstitutionsFragment : CoreFragment<InstitutionsViewModel>() {
 
         binding.recyclerViewInstitutions.adapter = adapter
         binding.recyclerViewInstitutions.layoutManager = LinearLayoutManager(context)
+        binding.root.setOnRefreshListener { viewModel.onUpdate() }
 
-        binding.root.setOnRefreshListener {
-            viewModel.onUpdate()
-        }
-
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                institutionsStateListener()
-            }
-        }
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                navigationStateListener()
-            }
-        }
+        launchCoroutine { institutionsStateListener() }
+        launchCoroutine { navigationStateListener() }
 
         return binding.root
     }

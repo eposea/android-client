@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_standard"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:orientation="horizontal"
     android:paddingHorizontal="?android:attr/listPreferredItemPaddingLeft"
-    android:paddingVertical="@dimen/padding_standard">
+    android:paddingVertical="@dimen/padding_standard"
+    app:cardElevation="@dimen/card_elevation_standard">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/padding_standard">
 
         <TextView
             android:id="@+id/textView_courseTitle"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="2"
             tools:text="@tools:sample/lorem[10]" />
 
         <TextView
-            android:id="@+id/textView_courseDescription"
+            android:id="@+id/textView_courseTeachers"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="3"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            tools:text="@tools:sample/lorem[20]" />
+            tools:text="John Doe, Dohn Joe" />
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_round_chevron_right_24"
-        tools:ignore="ContentDescription" />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

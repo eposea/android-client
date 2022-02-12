@@ -7,5 +7,5 @@ import xyz.savvamirzoyan.eposea.core.Model
 data class CourseCloud(
     val id: String,
     val title: String,
-    val description: String
+//    val description: String
 ) : Model.Cloud

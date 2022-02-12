@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/institutionsFragment">
+    app:startDestination="@id/coursesFragment">
 
     <fragment
         android:id="@+id/institutionsFragment"
@@ -27,5 +27,10 @@
             android:name="institutionId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/coursesFragment"
+        android:name="xyz.savvamirzoyan.eposea.ui.fragment.CoursesFragment"
+        android:label="fragment_courses"
+        tools:layout="@layout/fragment_courses" />
 
 </navigation>
