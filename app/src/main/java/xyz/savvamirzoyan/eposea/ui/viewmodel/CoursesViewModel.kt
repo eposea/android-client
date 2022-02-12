@@ -17,13 +17,22 @@ class CoursesViewModel(
     private val _coursesFlow = MutableStateFlow<List<CourseUi>>(listOf())
     val coursesFlow: StateFlow<List<CourseUi>> = _coursesFlow
 
+    private val _institutionTitleFlow = MutableStateFlow("")
+    val institutionTitleFlow: StateFlow<String> = _institutionTitleFlow
+
     init {
-        fetchCourses()
+        fetchInfo()
     }
 
-    fun fetchCourses() {
+    fun fetchInfo() {
         viewModelScope.launch {
             _coursesFlow.emit(listOf(CourseUi.Loading))
+
+            // Toolbar title
+            val toolbarTitle = coursesInteractor.fetchInstitutionTitle()
+            _institutionTitleFlow.emit(toolbarTitle)
+
+            // Courses
             val coursesDomain = coursesInteractor.fetchCourses()
             val coursesUi = coursesDomain.map { courseDomainToUiMapper.map(it) }
             _coursesFlow.emit(coursesUi)

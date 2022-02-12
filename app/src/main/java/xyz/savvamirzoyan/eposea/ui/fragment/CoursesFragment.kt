@@ -30,20 +30,32 @@ class CoursesFragment : CoreFragment<CoursesViewModel>() {
         adapter = CoursesRecyclerView(
             object : Retry {
                 override fun onRetry() {
+                    viewModel.fetchInfo()
                 }
             },
             CoursesDiffUtil()
         )
 
         launchCoroutine { coursesStatusListener() }
+        launchCoroutine { toolbarTitleStatusListener() }
 
         binding.recyclerViewCourses.adapter = adapter
         binding.recyclerViewCourses.layoutManager = LinearLayoutManager(context)
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.fetchInfo() }
 
         return binding.root
     }
 
     private suspend fun coursesStatusListener() {
-        viewModel.coursesFlow.collect { adapter.update(it) }
+        viewModel.coursesFlow.collect {
+            adapter.update(it)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private suspend fun toolbarTitleStatusListener() {
+        viewModel.institutionTitleFlow.collect {
+            binding.toolbar.title = it
+        }
     }
 }

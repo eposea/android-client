@@ -7,6 +7,7 @@ import xyz.savvamirzoyan.eposea.domain.model.CourseDomain
 interface CoursesInteractor {
 
     suspend fun fetchCourses(): List<CourseDomain>
+    suspend fun fetchInstitutionTitle(): String
 
     class Base(
         private val coursesRepository: CoursesRepository,
@@ -18,6 +19,10 @@ interface CoursesInteractor {
             // for now it would be just the first university
             val coursesDomain = coursesRepository.fetchCourses("TEST-1")
             return courseDataToDomainMapper.map(coursesDomain)
+        }
+
+        override suspend fun fetchInstitutionTitle(): String {
+            return "Test Institution"
         }
     }
 }
