@@ -1,2 +1,2 @@
 # android-client
-Android native client for EPOSEA
+Android native client for EPOSEA 📵
