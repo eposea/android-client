@@ -10,4 +10,10 @@
     <string name="error">Error</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up_now">Sign up now!</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="eposea_description">Eposea is an educational platform designed to bring students and teachers together</string>
 </resources>

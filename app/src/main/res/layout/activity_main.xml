@@ -21,5 +21,6 @@
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:menu="@menu/menu_bottom_navigation" />
 </LinearLayout>

@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/navigation_courses">
+    app:startDestination="@id/splashFragment">
 
     <include app:graph="@navigation/navigation_courses" />
     <include app:graph="@navigation/navigation_institutions" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="xyz.savvamirzoyan.eposea.ui.fragment.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/to_main"
+            app:destination="@id/navigation_courses" />
+        <action
+            android:id="@+id/to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="xyz.savvamirzoyan.eposea.ui.fragment.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

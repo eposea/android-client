@@ -30,14 +30,16 @@ import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionInfoToolbarDomainToUiMapper
 import xyz.savvamirzoyan.eposea.ui.viewmodel.CoursesViewModel
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionInfoViewModel
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
+import xyz.savvamirzoyan.eposea.ui.viewmodel.SplashViewModel
 
 private const val BASE_URL = BuildConfig.SERVER_URL
 
 class App : Application() {
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
+    private val json = Json { ignoreUnknownKeys = true }
+
+    lateinit var splashViewModel: SplashViewModel
+        private set
 
     lateinit var institutionsViewModel: InstitutionsViewModel
         private set
@@ -104,5 +106,6 @@ class App : Application() {
             resourceManager
         )
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
+        splashViewModel = SplashViewModel()
     }
 }

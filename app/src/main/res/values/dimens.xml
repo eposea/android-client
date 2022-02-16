@@ -8,6 +8,7 @@
     <dimen name="margin_xl">32dp</dimen>
     <dimen name="margin_xxl">40dp</dimen>
     <dimen name="margin_xxxl">48dp</dimen>
+    <dimen name="margin_giant">96dp</dimen>
 
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_standard">8dp</dimen>
