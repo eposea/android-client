@@ -17,7 +17,6 @@ class SplashFragment : CoreFragment<SplashViewModel>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
         viewModel = ((activity as CoreActivity).application as App).splashViewModel
 

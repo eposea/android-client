@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import xyz.savvamirzoyan.eposea.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
@@ -18,6 +19,12 @@ class LoginFragment : Fragment() {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        binding.textViewSignUp.setOnClickListener { openRegisterScreen() }
+
         return binding.root
+    }
+
+    private fun openRegisterScreen() {
+        findNavController().navigate(LoginFragmentDirections.toRegisterFragment())
     }
 }

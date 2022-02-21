@@ -8,12 +8,21 @@
     <string name="menu_item_courses">Courses</string>
     <string name="description">Description</string>
     <string name="error">Error</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Password</string>
+    <string name="hint_password_repeat">Repeat password</string>
     <string name="login">Login</string>
     <string name="sign_up_now">Sign up now!</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="eposea_description">Eposea is an educational platform designed to bring students and teachers together</string>
+    <string name="sign_up">Sign Up!</string>
+    <string name="hint_code_from_email">Code from e-mail</string>
+    <string name="send_confirmation_code">Send code</string>
+    <string name="email_field_helper_text">We will send confirmation code at this e-mail to prove its you</string>
+    <string name="email_field_error">E-mail is not valid</string>
+    <string name="password_field_error">Password must be 8 or more symbols and contain digits</string>
+    <string name="password_field_hint">Password must be 8 or more symbols and contain digits</string>
+    <string name="password_error_dont_match">Passwords don\'t match</string>
+    <string name="password_error_must_match">Passwords must match</string>
 </resources>

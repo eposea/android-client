@@ -1,6 +1,8 @@
 package xyz.savvamirzoyan.eposea.ui
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -8,37 +10,37 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import xyz.savvamirzoyan.eposea.BuildConfig
-import xyz.savvamirzoyan.eposea.data.mapper.CourseCloudToDataMapper
-import xyz.savvamirzoyan.eposea.data.mapper.InstitutionCloudToDataMapper
-import xyz.savvamirzoyan.eposea.data.mapper.InstitutionInfoCloudToDataMapper
+import xyz.savvamirzoyan.eposea.data.mapper.*
+import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
 import xyz.savvamirzoyan.eposea.data.repository.CoursesRepository
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionInfoRepository
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionRepository
 import xyz.savvamirzoyan.eposea.data.source.cloud.CourseCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionInfoCloudSource
+import xyz.savvamirzoyan.eposea.data.source.cloud.RegistrationService
 import xyz.savvamirzoyan.eposea.domain.interactor.CoursesInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInfoInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
+import xyz.savvamirzoyan.eposea.domain.interactor.RegisterInteractor
 import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionInfoDataToDomainMapper
-import xyz.savvamirzoyan.eposea.ui.mapper.CourseDomainToUiMapper
-import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionDomainToUiMapper
-import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionInfoDomainToUiMapper
-import xyz.savvamirzoyan.eposea.ui.mapper.InstitutionInfoToolbarDomainToUiMapper
-import xyz.savvamirzoyan.eposea.ui.viewmodel.CoursesViewModel
-import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionInfoViewModel
-import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
-import xyz.savvamirzoyan.eposea.ui.viewmodel.SplashViewModel
+import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationDataToDomainMapper
+import xyz.savvamirzoyan.eposea.ui.mapper.*
+import xyz.savvamirzoyan.eposea.ui.viewmodel.*
 
 private const val BASE_URL = BuildConfig.SERVER_URL
+private const val DATASTORE_NAME = "datastore"
 
 class App : Application() {
 
     private val json = Json { ignoreUnknownKeys = true }
 
     lateinit var splashViewModel: SplashViewModel
+        private set
+
+    lateinit var registerViewModel: RegisterViewModel
         private set
 
     lateinit var institutionsViewModel: InstitutionsViewModel
@@ -66,10 +68,11 @@ class App : Application() {
         // Other
         val resourceManager = ResourceManager.Base(applicationContext)
 
-        // Sources
+        // Sources and services
         val institutionCloudSource = retrofit.create(InstitutionCloudSource::class.java)
         val institutionInfoCloudSource = retrofit.create(InstitutionInfoCloudSource::class.java)
         val courseCloudSource = retrofit.create(CourseCloudSource::class.java)
+        val registrationService = retrofit.create(RegistrationService::class.java)
 
         // Mappers
         val courseCloudToDataMapper = CourseCloudToDataMapper.Base()
@@ -82,6 +85,10 @@ class App : Application() {
         val institutionInfoToolbarDomainToUiMapper = InstitutionInfoToolbarDomainToUiMapper.Base(resourceManager)
         val institutionInfoDomainToUiMapper = InstitutionInfoDomainToUiMapper.Base(resourceManager)
         val courseDomainToUiMapper = CourseDomainToUiMapper.Base(resourceManager)
+        val editTextStatusDomainToUiMapper = EditTextStatusDomainToUiMapper.Base(resourceManager)
+        val registrationCloudToDataMapper = RegistrationCloudToDataMapper.Base()
+        val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base()
+        val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base()
 
         // Repository
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)
@@ -89,6 +96,11 @@ class App : Application() {
             institutionInfoCloudSource, institutionInfoCloudToDataMapper
         )
         val coursesRepository = CoursesRepository.Base(courseCloudSource, courseCloudToDataMapper)
+        val authRepository = AuthRepository.Base(
+            registrationService,
+            registrationCloudToDataMapper,
+            registrationConfirmCloudToDataMapper
+        )
 
         // Interactors
         val institutionInteractor = InstitutionInteractor.Base(institutionRepository, institutionDataToDomainMapper)
@@ -96,6 +108,7 @@ class App : Application() {
             institutionInfoRepository, institutionInfoDataToDomainMapper
         )
         val coursesInteractor = CoursesInteractor.Base(coursesRepository, courseDataToDomainMapper)
+        val registerInteractor = RegisterInteractor.Base(authRepository, registrationDataToDomainMapper)
 
         // ViewModels
         institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
@@ -107,5 +120,8 @@ class App : Application() {
         )
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
         splashViewModel = SplashViewModel()
+        registerViewModel = RegisterViewModel(registerInteractor, editTextStatusDomainToUiMapper, resourceManager)
     }
+
+    val Context.dataStore by preferencesDataStore(DATASTORE_NAME)
 }
