@@ -19,7 +19,6 @@ Dependency/*
 /app/.idea/*
 /app/.svn/*
 /app/local.properties
-/gradle/wrapper/
 app/src/debug/google-services.json
 app/src/staging/google-services.json
 app/src/release/google-services.json
