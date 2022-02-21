@@ -3,7 +3,7 @@ name: build_apk_and_aab
 on:
   pull_request:
     branches:
-      - "develop"
+      - "main"
 
 jobs:
   build_apk_aab:
