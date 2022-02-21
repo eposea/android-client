@@ -3,8 +3,7 @@ name: run_tests
 on:
   pull-request:
     branches:
-      - "develop"
-      - "main"
+      - ["develop", "main"]
 
 jobs:
   Unit-test:
