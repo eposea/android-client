@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-debug.apk
-          path: app/build/outputs/apk/app-debug-unsigned.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
       - name: Upload AAB Bundle
         uses: actions/upload-artifact@v2
         with:
