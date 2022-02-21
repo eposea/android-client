@@ -1,9 +1,10 @@
 name: run_tests
 
 on:
-  pull-request:
+  pull_request:
     branches:
-      - ["develop", "main"]
+      - "develop" 
+      - "main"
 
 jobs:
   Unit-test:
