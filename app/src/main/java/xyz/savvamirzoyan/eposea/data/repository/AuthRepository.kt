@@ -13,6 +13,7 @@ interface AuthRepository {
 
     suspend fun sendRegisterCredentials(email: String, password: String): RegistrationData
     suspend fun sendConfirmationCode(code: String): RegistrationConfirmData
+    suspend fun checkToken(): Boolean
     suspend fun auth(funToAuthWithToken: (String) -> Unit)
 
     @ObsoleteCoroutinesApi
@@ -24,7 +25,7 @@ interface AuthRepository {
 
         private val variableContext = newSingleThreadContext("variable-context")
         private var tmpToken: String? = null
-        private var token: String? = null
+        private var token: String? = "null"
 
         override suspend fun sendRegisterCredentials(email: String, password: String): RegistrationData = try {
             val response = authService.register(email, password)
@@ -39,6 +40,8 @@ interface AuthRepository {
         } catch (e: Exception) {
             registrationConfirmCloudToDataMapper.map(e)
         }
+
+        override suspend fun checkToken(): Boolean = token != null
 
         override suspend fun auth(funToAuthWithToken: (String) -> Unit) {
             withContext(variableContext) {

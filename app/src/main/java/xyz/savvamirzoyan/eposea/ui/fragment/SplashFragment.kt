@@ -32,6 +32,8 @@ class SplashFragment : CoreFragment<SplashViewModel>() {
             }
         }
 
+        viewModel.onStart()
+
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 }

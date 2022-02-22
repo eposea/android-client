@@ -1,18 +1,19 @@
 package xyz.savvamirzoyan.eposea.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import xyz.savvamirzoyan.eposea.domain.interactor.SplashInteractor
 
-class SplashViewModel : CoreViewModel() {
+class SplashViewModel(
+    private val splashInteractor: SplashInteractor
+) : CoreViewModel() {
 
-    private val _isLoggedInStateFlow = MutableStateFlow<Boolean?>(null)
-    val isLoggedInSharedFlow: StateFlow<Boolean?> = _isLoggedInStateFlow
+    val isLoggedInSharedFlow: StateFlow<Boolean?> = splashInteractor.isLoggedInStateFlow
 
-    init {
+    fun onStart() {
         viewModelScope.launch {
-            _isLoggedInStateFlow.emit(false)
+            splashInteractor.checkToken()
         }
     }
 }

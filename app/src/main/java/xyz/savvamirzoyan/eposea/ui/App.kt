@@ -19,10 +19,7 @@ import xyz.savvamirzoyan.eposea.data.source.cloud.AuthService
 import xyz.savvamirzoyan.eposea.data.source.cloud.CourseCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionInfoCloudSource
-import xyz.savvamirzoyan.eposea.domain.interactor.CoursesInteractor
-import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInfoInteractor
-import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
-import xyz.savvamirzoyan.eposea.domain.interactor.RegisterInteractor
+import xyz.savvamirzoyan.eposea.domain.interactor.*
 import xyz.savvamirzoyan.eposea.domain.mapper.*
 import xyz.savvamirzoyan.eposea.ui.mapper.*
 import xyz.savvamirzoyan.eposea.ui.viewmodel.*
@@ -111,6 +108,7 @@ class App : Application() {
             registrationDataToDomainMapper,
             registrationConfirmDataToDomainMapper
         )
+        val splashInteractor = SplashInteractor.Base(authRepository)
 
         // ViewModels
         institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
@@ -121,7 +119,7 @@ class App : Application() {
             resourceManager
         )
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
-        splashViewModel = SplashViewModel()
+        splashViewModel = SplashViewModel(splashInteractor)
         registerViewModel = RegisterViewModel(registerInteractor, editTextStatusDomainToUiMapper, resourceManager)
     }
 
