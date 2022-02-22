@@ -12,12 +12,7 @@ interface RegistrationConfirmCloudToDataMapper : Mapper<RegistrationConfirmCloud
 
     class Base : RegistrationConfirmCloudToDataMapper {
 
-        override fun map(model: RegistrationConfirmCloud) = if (model.token != null && model.code in 200..299) {
-            RegistrationConfirmData.Base(model.token)
-        } else {
-            RegistrationConfirmData.Error(ErrorData.ApiError(RuntimeException(), model.message))
-        }
-
+        override fun map(model: RegistrationConfirmCloud) = RegistrationConfirmData.Base(model.token!!)
         override fun map(exception: Exception) = RegistrationConfirmData.Error(
             ErrorData.NetworkError(exception, exception.message ?: "")
         )

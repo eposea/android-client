@@ -1,9 +1,9 @@
 package xyz.savvamirzoyan.eposea.data.model.cloud
 
+import kotlinx.serialization.Serializable
 import xyz.savvamirzoyan.eposea.core.Model
 
+@Serializable
 data class RegistrationConfirmCloud(
-    val code: Int,
-    val message: String,
     val token: String? = null
 ) : Model.Cloud

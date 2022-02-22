@@ -5,43 +5,45 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import xyz.savvamirzoyan.eposea.data.mapper.RegistrationCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.mapper.RegistrationConfirmCloudToDataMapper
-import xyz.savvamirzoyan.eposea.data.model.cloud.request.RegistrationConfirmRequest
-import xyz.savvamirzoyan.eposea.data.model.cloud.request.RegistrationRequest
 import xyz.savvamirzoyan.eposea.data.model.data.RegistrationConfirmData
 import xyz.savvamirzoyan.eposea.data.model.data.RegistrationData
-import xyz.savvamirzoyan.eposea.data.source.cloud.RegistrationService
+import xyz.savvamirzoyan.eposea.data.source.cloud.AuthService
 
 interface AuthRepository {
 
-    suspend fun sendCredentials(email: String, password: String): RegistrationData
+    suspend fun sendRegisterCredentials(email: String, password: String): RegistrationData
     suspend fun sendConfirmationCode(code: String): RegistrationConfirmData
+    suspend fun auth(funToAuthWithToken: (String) -> Unit)
 
     @ObsoleteCoroutinesApi
     class Base(
-        private val registrationService: RegistrationService,
+        private val authService: AuthService,
         private val registrationCloudToDataMapper: RegistrationCloudToDataMapper,
         private val registrationConfirmCloudToDataMapper: RegistrationConfirmCloudToDataMapper
     ) : AuthRepository {
 
         private val variableContext = newSingleThreadContext("variable-context")
         private var tmpToken: String? = null
+        private var token: String? = null
 
-        override suspend fun sendCredentials(email: String, password: String): RegistrationData = try {
-            val request = RegistrationRequest(email, password)
-            val response = registrationService.register(request)
-            withContext(variableContext) { tmpToken = response.token }
+        override suspend fun sendRegisterCredentials(email: String, password: String): RegistrationData = try {
+            val response = authService.register(email, password)
+            withContext(variableContext) { tmpToken = response.tmpToken }
             registrationCloudToDataMapper.map(response)
         } catch (e: Exception) {
             registrationCloudToDataMapper.map(e)
         }
 
         override suspend fun sendConfirmationCode(code: String): RegistrationConfirmData = try {
-            val token: String
-            withContext(variableContext) { token = tmpToken!! }
-            val request = RegistrationConfirmRequest(token, code)
-            registrationConfirmCloudToDataMapper.map(registrationService.confirmRegistration(request))
+            registrationConfirmCloudToDataMapper.map(authService.registerProof(tmpToken!!, code))
         } catch (e: Exception) {
             registrationConfirmCloudToDataMapper.map(e)
+        }
+
+        override suspend fun auth(funToAuthWithToken: (String) -> Unit) {
+            withContext(variableContext) {
+                funToAuthWithToken(token ?: "")
+            }
         }
     }
 }

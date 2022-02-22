@@ -15,18 +15,15 @@ import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
 import xyz.savvamirzoyan.eposea.data.repository.CoursesRepository
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionInfoRepository
 import xyz.savvamirzoyan.eposea.data.repository.InstitutionRepository
+import xyz.savvamirzoyan.eposea.data.source.cloud.AuthService
 import xyz.savvamirzoyan.eposea.data.source.cloud.CourseCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionInfoCloudSource
-import xyz.savvamirzoyan.eposea.data.source.cloud.RegistrationService
 import xyz.savvamirzoyan.eposea.domain.interactor.CoursesInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInfoInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.InstitutionInteractor
 import xyz.savvamirzoyan.eposea.domain.interactor.RegisterInteractor
-import xyz.savvamirzoyan.eposea.domain.mapper.CourseDataToDomainMapper
-import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionDataToDomainMapper
-import xyz.savvamirzoyan.eposea.domain.mapper.InstitutionInfoDataToDomainMapper
-import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationDataToDomainMapper
+import xyz.savvamirzoyan.eposea.domain.mapper.*
 import xyz.savvamirzoyan.eposea.ui.mapper.*
 import xyz.savvamirzoyan.eposea.ui.viewmodel.*
 
@@ -52,7 +49,7 @@ class App : Application() {
     lateinit var coursesViewModel: CoursesViewModel
         private set
 
-    @OptIn(ExperimentalSerializationApi::class)
+    @OptIn(ExperimentalSerializationApi::class, kotlinx.coroutines.ObsoleteCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
 
@@ -72,7 +69,7 @@ class App : Application() {
         val institutionCloudSource = retrofit.create(InstitutionCloudSource::class.java)
         val institutionInfoCloudSource = retrofit.create(InstitutionInfoCloudSource::class.java)
         val courseCloudSource = retrofit.create(CourseCloudSource::class.java)
-        val registrationService = retrofit.create(RegistrationService::class.java)
+        val registrationService = retrofit.create(AuthService::class.java)
 
         // Mappers
         val courseCloudToDataMapper = CourseCloudToDataMapper.Base()
@@ -89,6 +86,7 @@ class App : Application() {
         val registrationCloudToDataMapper = RegistrationCloudToDataMapper.Base()
         val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base()
         val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base()
+        val registrationConfirmDataToDomainMapper = RegistrationConfirmDataToDomainMapper.Base()
 
         // Repository
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)
@@ -108,7 +106,11 @@ class App : Application() {
             institutionInfoRepository, institutionInfoDataToDomainMapper
         )
         val coursesInteractor = CoursesInteractor.Base(coursesRepository, courseDataToDomainMapper)
-        val registerInteractor = RegisterInteractor.Base(authRepository, registrationDataToDomainMapper)
+        val registerInteractor = RegisterInteractor.Base(
+            authRepository,
+            registrationDataToDomainMapper,
+            registrationConfirmDataToDomainMapper
+        )
 
         // ViewModels
         institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)

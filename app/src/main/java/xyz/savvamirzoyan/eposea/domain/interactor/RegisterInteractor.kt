@@ -1,5 +1,6 @@
 package xyz.savvamirzoyan.eposea.domain.interactor
 
+import android.util.Log
 import android.util.Patterns
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,8 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
 import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
+import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationConfirmDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationDataToDomainMapper
 import xyz.savvamirzoyan.eposea.domain.model.EditTextStatusDomain
+import xyz.savvamirzoyan.eposea.domain.model.RegistrationConfirmDomain
 import xyz.savvamirzoyan.eposea.domain.model.RegistrationDomain
 
 interface RegisterInteractor {
@@ -22,6 +25,7 @@ interface RegisterInteractor {
     val isSignUpButtonVisibleFlow: StateFlow<Boolean>
     val isProgressSignUpVisibleFlow: StateFlow<Boolean>
     val errorMessageIdFlow: SharedFlow<Int>
+    val isLoggedInSharedFlow: SharedFlow<Unit>
 
     suspend fun validateCredentials(email: String, password: String, passwordRepeat: String)
     suspend fun signUp(email: String, password: String)
@@ -29,7 +33,8 @@ interface RegisterInteractor {
 
     class Base(
         private val authRepository: AuthRepository,
-        private val registrationDataToDomainMapper: RegistrationDataToDomainMapper
+        private val registrationDataToDomainMapper: RegistrationDataToDomainMapper,
+        private val registrationConfirmDataToDomainMapper: RegistrationConfirmDataToDomainMapper
     ) : RegisterInteractor {
 
         private val emailStandardStatus = EditTextStatusDomain()
@@ -59,6 +64,9 @@ interface RegisterInteractor {
 
         private val _errorMessageIdFlow = MutableSharedFlow<Int>()
         override val errorMessageIdFlow: SharedFlow<Int> = _errorMessageIdFlow
+
+        private val _isLoggedInSharedFlow = MutableSharedFlow<Unit>()
+        override val isLoggedInSharedFlow: SharedFlow<Unit> = _isLoggedInSharedFlow
 
         override suspend fun validateCredentials(email: String, password: String, passwordRepeat: String) {
 
@@ -102,7 +110,8 @@ interface RegisterInteractor {
             _isSignUpButtonVisibleFlow.emit(false)
             _isProgressSignUpVisibleFlow.emit(true)
 
-            val registrationDomain = registrationDataToDomainMapper.map(authRepository.sendCredentials(email, password))
+            val registrationDomain =
+                registrationDataToDomainMapper.map(authRepository.sendRegisterCredentials(email, password))
 
             _isProgressSignUpVisibleFlow.emit(false)
 
@@ -125,7 +134,17 @@ interface RegisterInteractor {
         }
 
         override suspend fun sendVerificationCode(verificationCode: String) {
-            authRepository.sendConfirmationCode(verificationCode)
+            val registrationConfirmDomain =
+                registrationConfirmDataToDomainMapper.map(authRepository.sendConfirmationCode(verificationCode))
+
+            Log.d(
+                "SPAMEGGS",
+                "registrationConfirmDomain is success: ${registrationConfirmDomain is RegistrationConfirmDomain.Success}"
+            )
+
+            if (registrationConfirmDomain is RegistrationConfirmDomain.Success) {
+                _isLoggedInSharedFlow.emit(Unit)
+            }
         }
 
         private fun isEmailInvalid(email: String) =

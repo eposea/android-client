@@ -11,12 +11,7 @@ interface RegistrationCloudToDataMapper : Mapper<RegistrationCloud, Registration
 
     class Base : RegistrationCloudToDataMapper {
 
-        override fun map(model: RegistrationCloud) = if (model.token != null && model.code in 200..299) {
-            RegistrationData.Base(model.token)
-        } else {
-            RegistrationData.Error(model.code, model.message)
-        }
-
+        override fun map(model: RegistrationCloud) = RegistrationData.Base(model.tmpToken!!)
         override fun map(exception: Exception) = RegistrationData.Exception(exception)
     }
 }
