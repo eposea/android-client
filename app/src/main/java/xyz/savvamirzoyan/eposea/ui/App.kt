@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import xyz.savvamirzoyan.eposea.BuildConfig
+import xyz.savvamirzoyan.eposea.core.ExceptionMapper
 import xyz.savvamirzoyan.eposea.data.mapper.*
 import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
 import xyz.savvamirzoyan.eposea.data.repository.CoursesRepository
@@ -66,24 +67,26 @@ class App : Application() {
         val institutionCloudSource = retrofit.create(InstitutionCloudSource::class.java)
         val institutionInfoCloudSource = retrofit.create(InstitutionInfoCloudSource::class.java)
         val courseCloudSource = retrofit.create(CourseCloudSource::class.java)
-        val registrationService = retrofit.create(AuthService::class.java)
+        val authService = retrofitAuth.create(AuthService::class.java)
 
         // Mappers
-        val courseCloudToDataMapper = CourseCloudToDataMapper.Base()
-        val institutionCloudToDataMapper = InstitutionCloudToDataMapper.Base(courseCloudToDataMapper)
+        val exceptionMapper = ExceptionMapper.BaseExceptionToErrorDataMapper()
+        val errorDataToDomainMapper = ExceptionMapper.BaseErrorDataToDomainMapper()
+        val courseCloudToDataMapper = CourseCloudToDataMapper.Base(exceptionMapper)
+        val institutionCloudToDataMapper = InstitutionCloudToDataMapper.Base(exceptionMapper)
         val courseDataToDomainMapper = CourseDataToDomainMapper.Base()
         val institutionDataToDomainMapper = InstitutionDataToDomainMapper.Base()
         val institutionDomainToWithCoursesUiMapper = InstitutionDomainToUiMapper.Base(resourceManager)
-        val institutionInfoCloudToDataMapper = InstitutionInfoCloudToDataMapper.Base()
+        val institutionInfoCloudToDataMapper = InstitutionInfoCloudToDataMapper.Base(exceptionMapper)
         val institutionInfoDataToDomainMapper = InstitutionInfoDataToDomainMapper.Base()
         val institutionInfoToolbarDomainToUiMapper = InstitutionInfoToolbarDomainToUiMapper.Base(resourceManager)
         val institutionInfoDomainToUiMapper = InstitutionInfoDomainToUiMapper.Base(resourceManager)
         val courseDomainToUiMapper = CourseDomainToUiMapper.Base(resourceManager)
         val editTextStatusDomainToUiMapper = EditTextStatusDomainToUiMapper.Base(resourceManager)
-        val registrationCloudToDataMapper = RegistrationCloudToDataMapper.Base()
-        val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base()
-        val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base()
-        val registrationConfirmDataToDomainMapper = RegistrationConfirmDataToDomainMapper.Base()
+        val registrationCloudToDataMapper = RegistrationCloudToDataMapper.Base(exceptionMapper)
+        val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base(exceptionMapper)
+        val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base(errorDataToDomainMapper)
+        val registrationConfirmDataToDomainMapper = RegistrationConfirmDataToDomainMapper.Base(errorDataToDomainMapper)
 
         // Repository
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)
@@ -92,7 +95,7 @@ class App : Application() {
         )
         val coursesRepository = CoursesRepository.Base(courseCloudSource, courseCloudToDataMapper)
         val authRepository = AuthRepository.Base(
-            registrationService,
+            authService,
             registrationCloudToDataMapper,
             registrationConfirmCloudToDataMapper
         )

@@ -1,5 +1,6 @@
 package xyz.savvamirzoyan.eposea.domain.mapper
 
+import xyz.savvamirzoyan.eposea.core.ExceptionMapper
 import xyz.savvamirzoyan.eposea.core.Mapper
 import xyz.savvamirzoyan.eposea.data.model.data.RegistrationConfirmData
 import xyz.savvamirzoyan.eposea.domain.model.RegistrationConfirmDomain
@@ -8,11 +9,13 @@ interface RegistrationConfirmDataToDomainMapper : Mapper<RegistrationConfirmData
 
     fun map(model: RegistrationConfirmData): RegistrationConfirmDomain
 
-    class Base : RegistrationConfirmDataToDomainMapper {
+    class Base(
+        private val errorDataToDomainMapper: ExceptionMapper.BaseErrorDataToDomainMapper
+    ) : RegistrationConfirmDataToDomainMapper {
 
         override fun map(model: RegistrationConfirmData) = when (model) {
             is RegistrationConfirmData.Base -> RegistrationConfirmDomain.Success
-            is RegistrationConfirmData.Error -> RegistrationConfirmDomain.Error(model.error.errorMessage)
+            is RegistrationConfirmData.Error -> RegistrationConfirmDomain.Error(errorDataToDomainMapper.mapError(model.error))
         }
     }
 }

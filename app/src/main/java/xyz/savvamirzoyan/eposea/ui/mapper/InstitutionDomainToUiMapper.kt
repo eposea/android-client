@@ -36,11 +36,11 @@ interface InstitutionDomainToUiMapper : Mapper<InstitutionDomain, InstitutionUi>
                 when (model.error) {
                     is ErrorDomain.ApiError -> InstitutionUi.Error(
                         resourceManager.getString(R.string.error_api),
-                        model.error.errorMessage
+                        model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
                     )
                     is ErrorDomain.OtherError -> InstitutionUi.Error(
                         resourceManager.getString(R.string.error_other),
-                        model.error.errorMessage
+                        model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
                     )
                 }
             }

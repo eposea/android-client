@@ -6,5 +6,5 @@ import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 sealed class RegistrationDomain : Model.Domain {
 
     object Base : RegistrationDomain()
-    class Error(val error: ErrorDomain) : RegistrationDomain()
+    data class Error(val error: ErrorDomain) : RegistrationDomain()
 }

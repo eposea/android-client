@@ -25,4 +25,5 @@
     <string name="password_field_hint">Password must be 8 or more symbols and contain digits</string>
     <string name="password_error_dont_match">Passwords don\'t match</string>
     <string name="password_error_must_match">Passwords must match</string>
+    <string name="no_error_message">No error message</string>
 </resources>
