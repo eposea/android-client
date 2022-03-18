@@ -32,10 +32,4 @@ interface AuthService {
     suspend fun checkToken(
         @Query("token") token: String
     ): CheckTokenCloud
-
-//    @POST("registration")
-//    suspend fun register(@Body registrationRequest: RegistrationRequest): RegistrationCloud
-//
-//    @POST("registration/confirm")
-//    suspend fun confirmRegistration(@Body registrationConfirmRequest: RegistrationConfirmRequest): RegistrationConfirmCloud
 }

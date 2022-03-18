@@ -5,21 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.MainActivity">
+    tools:context=".ui.activity.AuthActivity">
 
     <fragment
-        android:id="@+id/main_nav_host_fragment"
+        android:id="@+id/auth_nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation_main"
+        app:navGraph="@navigation/navigation_auth"
         tools:ignore="FragmentTagUsage" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation_view"
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/auth_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/menu_bottom_navigation" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

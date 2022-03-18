@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".ui.fragment.SplashFragment">
+    tools:context=".ui.activity.SplashActivity">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
@@ -24,5 +24,4 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_xxxl"
         android:layout_weight="4" />
-
 </LinearLayout>

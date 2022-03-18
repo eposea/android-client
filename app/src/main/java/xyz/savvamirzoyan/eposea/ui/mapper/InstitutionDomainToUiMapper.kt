@@ -39,7 +39,7 @@ interface InstitutionDomainToUiMapper : Mapper<InstitutionDomain, InstitutionUi>
                         model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
                     )
                     is ErrorDomain.OtherError -> InstitutionUi.Error(
-                        resourceManager.getString(R.string.error_other),
+                        resourceManager.getString(R.string.error),
                         model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
                     )
                 }

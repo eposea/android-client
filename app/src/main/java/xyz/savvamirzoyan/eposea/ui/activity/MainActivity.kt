@@ -1,5 +1,6 @@
 package xyz.savvamirzoyan.eposea.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,5 +27,17 @@ class MainActivity : CoreActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        finishAffinity()
+    }
+
+    fun startLogin() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
     }
 }

@@ -4,7 +4,4 @@ import kotlinx.serialization.Serializable
 import xyz.savvamirzoyan.eposea.core.Model
 
 @Serializable
-data class LoginCloud(
-    val status: Boolean,
-    val token: String
-) : Model.Cloud
+data class LoginCloud(val token: String) : Model.Cloud

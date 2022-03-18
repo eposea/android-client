@@ -38,6 +38,9 @@ class App : Application() {
     lateinit var registerViewModel: RegisterViewModel
         private set
 
+    lateinit var loginViewModel: LoginViewModel
+        private set
+
     lateinit var institutionsViewModel: InstitutionsViewModel
         private set
 
@@ -57,6 +60,10 @@ class App : Application() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
+            .addConverterFactory(converterFactory)
+            .build()
+        val retrofitAuth = Retrofit.Builder()
+            .baseUrl("https://15668749-2b9f-49e8-bf28-286a59c3ca15.mock.pstmn.io/")
             .addConverterFactory(converterFactory)
             .build()
 
@@ -112,6 +119,7 @@ class App : Application() {
             registrationConfirmDataToDomainMapper
         )
         val splashInteractor = SplashInteractor.Base(authRepository)
+        val loginInteractor = LoginInteractor.Base(authRepository)
 
         // ViewModels
         institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
@@ -124,6 +132,7 @@ class App : Application() {
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
         splashViewModel = SplashViewModel(splashInteractor)
         registerViewModel = RegisterViewModel(registerInteractor, editTextStatusDomainToUiMapper, resourceManager)
+        loginViewModel = LoginViewModel(loginInteractor, editTextStatusDomainToUiMapper)
     }
 
     val Context.dataStore by preferencesDataStore(DATASTORE_NAME)

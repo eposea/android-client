@@ -1,7 +1,5 @@
 package xyz.savvamirzoyan.eposea.domain.interactor
 
-import android.util.Log
-import android.util.Patterns
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -70,8 +68,8 @@ interface RegisterInteractor {
 
         override suspend fun validateCredentials(email: String, password: String, passwordRepeat: String) {
 
-            val isEmailInvalid = isEmailInvalid(email)
-            val isPasswordInvalid = isPasswordInvalid(password)
+            val isEmailInvalid = !authRepository.isEmailValid(email)
+            val isPasswordInvalid = !authRepository.isPasswordValid(password)
             val isPasswordRepeatInvalid = isPasswordRepeatInvalid(passwordRepeat, password)
 
             // Email
@@ -125,7 +123,7 @@ interface RegisterInteractor {
 
                     val errorMessageId = when (registrationDomain.error) {
                         is ErrorDomain.ApiError -> R.string.error_api
-                        is ErrorDomain.OtherError -> R.string.error_other
+                        is ErrorDomain.OtherError -> R.string.error
                     }
 
                     _errorMessageIdFlow.emit(errorMessageId)
@@ -134,31 +132,14 @@ interface RegisterInteractor {
         }
 
         override suspend fun sendVerificationCode(verificationCode: String) {
-            val registrationConfirmDomain =
-                registrationConfirmDataToDomainMapper.map(authRepository.sendConfirmationCode(verificationCode))
-
-            Log.d(
-                "SPAMEGGS",
-                "registrationConfirmDomain is success: ${registrationConfirmDomain is RegistrationConfirmDomain.Success}"
-            )
-
+            val registrationConfirmDomain = registrationConfirmDataToDomainMapper
+                .map(authRepository.sendConfirmationCode(verificationCode))
             if (registrationConfirmDomain is RegistrationConfirmDomain.Success) {
                 _isLoggedInSharedFlow.emit(Unit)
             }
         }
 
-        private fun isEmailInvalid(email: String) =
-            !(Patterns.EMAIL_ADDRESS.matcher(email).matches()) && email.isNotEmpty()
-
-        private fun isPasswordInvalid(password: String) =
-            password.isNotEmpty() && password.isBlank() || (password.isNotEmpty() && (password.length < 8 || !password.hasNumbers()))
-
         private fun isPasswordRepeatInvalid(passwordRepeat: String, password: String) =
             (passwordRepeat.isBlank() && passwordRepeat.isNotEmpty()) || (passwordRepeat.isNotEmpty() && passwordRepeat != password)
-
-        private fun String.hasNumbers(): Boolean {
-            this.forEach { if (it.isDigit()) return true }
-            return false
-        }
     }
 }
