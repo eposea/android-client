@@ -9,9 +9,10 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.collect
 import xyz.savvamirzoyan.eposea.core.CoreTextWatcher
 import xyz.savvamirzoyan.eposea.databinding.FragmentLoginBinding
+import xyz.savvamirzoyan.eposea.ui.activity.AuthActivity
 import xyz.savvamirzoyan.eposea.ui.viewmodel.LoginViewModel
 
-class LoginFragment : CoreFragment<LoginViewModel>() {
+class LoginFragment : CoreFragment<AuthActivity, LoginViewModel>() {
 
     private lateinit var binding: FragmentLoginBinding
 

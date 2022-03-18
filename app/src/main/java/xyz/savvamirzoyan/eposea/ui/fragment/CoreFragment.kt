@@ -10,9 +10,11 @@ import xyz.savvamirzoyan.eposea.ui.App
 import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
 import xyz.savvamirzoyan.eposea.ui.viewmodel.CoreViewModel
 
-abstract class CoreFragment<VM : CoreViewModel> : Fragment() {
+@Suppress("UNCHECKED_CAST")
+abstract class CoreFragment<ACT : CoreActivity, VM : CoreViewModel> : Fragment() {
 
-    protected val app: App by lazy { ((activity as CoreActivity).application as App) }
+    protected val app: App by lazy { ((activity as ACT).application as App) }
+    protected val act: ACT by lazy { (activity as ACT) }
 
     protected lateinit var viewModel: VM
 

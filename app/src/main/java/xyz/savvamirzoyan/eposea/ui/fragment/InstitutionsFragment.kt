@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.Clicker
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionsBinding
-import xyz.savvamirzoyan.eposea.ui.App
-import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
+import xyz.savvamirzoyan.eposea.ui.activity.MainActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsDiffUtil
 import xyz.savvamirzoyan.eposea.ui.model.InstitutionUi
 import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsRecyclerView
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
 
-class InstitutionsFragment : CoreFragment<InstitutionsViewModel>() {
+@OptIn(ExperimentalSerializationApi::class)
+class InstitutionsFragment : CoreFragment<MainActivity, InstitutionsViewModel>() {
 
     private lateinit var binding: FragmentInstitutionsBinding
     private lateinit var adapter: InstitutionsRecyclerView
@@ -28,7 +29,7 @@ class InstitutionsFragment : CoreFragment<InstitutionsViewModel>() {
     ): View {
 
         binding = FragmentInstitutionsBinding.inflate(inflater, container, false)
-        viewModel = ((activity as CoreActivity).application as App).institutionsViewModel
+        viewModel = app.institutionsViewModel
 
         adapter = InstitutionsRecyclerView(
             object : Retry {

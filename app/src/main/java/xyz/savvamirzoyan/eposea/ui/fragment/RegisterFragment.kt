@@ -9,9 +9,10 @@ import kotlinx.coroutines.flow.collect
 import xyz.savvamirzoyan.eposea.core.CoreTextWatcher
 import xyz.savvamirzoyan.eposea.databinding.FragmentRegisterBinding
 import xyz.savvamirzoyan.eposea.extension.snackbar
+import xyz.savvamirzoyan.eposea.ui.activity.AuthActivity
 import xyz.savvamirzoyan.eposea.ui.viewmodel.RegisterViewModel
 
-class RegisterFragment : CoreFragment<RegisterViewModel>() {
+class RegisterFragment : CoreFragment<AuthActivity, RegisterViewModel>() {
 
     private lateinit var binding: FragmentRegisterBinding
 

@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentCoursesBinding
-import xyz.savvamirzoyan.eposea.ui.App
-import xyz.savvamirzoyan.eposea.ui.activity.CoreActivity
+import xyz.savvamirzoyan.eposea.ui.activity.MainActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.CoursesDiffUtil
 import xyz.savvamirzoyan.eposea.ui.recyclerview.CoursesRecyclerView
 import xyz.savvamirzoyan.eposea.ui.viewmodel.CoursesViewModel
 
-class CoursesFragment : CoreFragment<CoursesViewModel>() {
+@ExperimentalSerializationApi
+class CoursesFragment : CoreFragment<MainActivity, CoursesViewModel>() {
 
     private lateinit var binding: FragmentCoursesBinding
     private lateinit var adapter: CoursesRecyclerView
@@ -25,7 +26,7 @@ class CoursesFragment : CoreFragment<CoursesViewModel>() {
     ): View {
 
         binding = FragmentCoursesBinding.inflate(inflater, container, false)
-        viewModel = ((activity as CoreActivity).application as App).coursesViewModel
+        viewModel = app.coursesViewModel
 
         adapter = CoursesRecyclerView(
             object : Retry {
