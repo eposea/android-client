@@ -49,7 +49,7 @@ class RegisterViewModel(
     val errorMessageFlow: Flow<String> = registerInteractor.errorMessageIdFlow
         .map { resourceManager.getString(it) }
 
-    val isLoggedInSharedFlow = registerInteractor.isLoggedInSharedFlow
+    val isLoggedInSharedFlow = registerInteractor.isUserLoggedInFlow
 
     private val _isSendCodeButtonEnabledFlow = MutableStateFlow(false)
     val isSendCodeButtonEnabledFlow: StateFlow<Boolean> = _isSendCodeButtonEnabledFlow

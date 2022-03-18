@@ -23,7 +23,7 @@ interface RegisterInteractor {
     val isSignUpButtonVisibleFlow: StateFlow<Boolean>
     val isProgressSignUpVisibleFlow: StateFlow<Boolean>
     val errorMessageIdFlow: SharedFlow<Int>
-    val isLoggedInSharedFlow: SharedFlow<Unit>
+    val isUserLoggedInFlow: SharedFlow<Unit>
 
     suspend fun validateCredentials(email: String, password: String, passwordRepeat: String)
     suspend fun signUp(email: String, password: String)
@@ -63,8 +63,8 @@ interface RegisterInteractor {
         private val _errorMessageIdFlow = MutableSharedFlow<Int>()
         override val errorMessageIdFlow: SharedFlow<Int> = _errorMessageIdFlow
 
-        private val _isLoggedInSharedFlow = MutableSharedFlow<Unit>()
-        override val isLoggedInSharedFlow: SharedFlow<Unit> = _isLoggedInSharedFlow
+        private val _isUserLoggedInFlow = MutableSharedFlow<Unit>()
+        override val isUserLoggedInFlow: SharedFlow<Unit> = _isUserLoggedInFlow
 
         override suspend fun validateCredentials(email: String, password: String, passwordRepeat: String) {
 
@@ -135,7 +135,7 @@ interface RegisterInteractor {
             val registrationConfirmDomain = registrationConfirmDataToDomainMapper
                 .map(authRepository.sendConfirmationCode(verificationCode))
             if (registrationConfirmDomain is RegistrationConfirmDomain.Success) {
-                _isLoggedInSharedFlow.emit(Unit)
+                _isUserLoggedInFlow.emit(Unit)
             }
         }
 

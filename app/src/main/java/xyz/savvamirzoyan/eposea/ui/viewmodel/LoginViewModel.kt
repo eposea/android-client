@@ -5,12 +5,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import xyz.savvamirzoyan.eposea.domain.interactor.LoginInteractor
+import xyz.savvamirzoyan.eposea.domain.mapper.AuthStatusDomainToUiMapper
 import xyz.savvamirzoyan.eposea.ui.mapper.EditTextStatusDomainToUiMapper
 import xyz.savvamirzoyan.eposea.ui.model.EditTextStatusUi
 
 class LoginViewModel(
     private val loginInteractor: LoginInteractor,
-    private val editTextStatusDomainToUiMapper: EditTextStatusDomainToUiMapper
+    private val editTextStatusDomainToUiMapper: EditTextStatusDomainToUiMapper,
+    private val authStatusDomainToUiMapper: AuthStatusDomainToUiMapper
 ) : CoreViewModel() {
 
     private var email = ""
@@ -23,6 +25,9 @@ class LoginViewModel(
         .map { editTextStatusDomainToUiMapper.map(it) }
 
     val isLoginButtonEnabledFlow: Flow<Boolean> = loginInteractor.isLoginButtonEnabledStateFlow
+
+    val authStatusFlow = loginInteractor.resultStatus
+        .map { authStatusDomainToUiMapper.map(it) }
 
     fun onEmailChange(newEmail: String) {
         email = newEmail

@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,10 +14,7 @@ import retrofit2.Retrofit
 import xyz.savvamirzoyan.eposea.BuildConfig
 import xyz.savvamirzoyan.eposea.core.ExceptionMapper
 import xyz.savvamirzoyan.eposea.data.mapper.*
-import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
-import xyz.savvamirzoyan.eposea.data.repository.CoursesRepository
-import xyz.savvamirzoyan.eposea.data.repository.InstitutionInfoRepository
-import xyz.savvamirzoyan.eposea.data.repository.InstitutionRepository
+import xyz.savvamirzoyan.eposea.data.repository.*
 import xyz.savvamirzoyan.eposea.data.source.cloud.AuthService
 import xyz.savvamirzoyan.eposea.data.source.cloud.CourseCloudSource
 import xyz.savvamirzoyan.eposea.data.source.cloud.InstitutionCloudSource
@@ -94,8 +93,13 @@ class App : Application() {
         val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base(exceptionMapper)
         val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base(errorDataToDomainMapper)
         val registrationConfirmDataToDomainMapper = RegistrationConfirmDataToDomainMapper.Base(errorDataToDomainMapper)
+        val loginCloudToDataMapper = LoginCloudToDataMapper.Base(exceptionMapper)
+        val loginDataToDomainMapper = LoginDataToDomainMapper.Base()
+        val loginDomainToAuthStatusDomainMapper = LoginDomainToAuthStatusDomainMapper.Base()
+        val authStatusDomainToUiMapper = AuthStatusDomainToUiMapper.Base(resourceManager)
 
         // Repository
+        val tokenDataStoreRepository = DataStoreRepository.TokenDataStoreRepository(dataStore)
         val institutionRepository = InstitutionRepository.Base(institutionCloudSource, institutionCloudToDataMapper)
         val institutionInfoRepository = InstitutionInfoRepository.Base(
             institutionInfoCloudSource, institutionInfoCloudToDataMapper
@@ -103,8 +107,11 @@ class App : Application() {
         val coursesRepository = CoursesRepository.Base(courseCloudSource, courseCloudToDataMapper)
         val authRepository = AuthRepository.Base(
             authService,
+            loginCloudToDataMapper,
             registrationCloudToDataMapper,
-            registrationConfirmCloudToDataMapper
+            registrationConfirmCloudToDataMapper,
+            tokenDataStoreRepository,
+            CoroutineScope(Dispatchers.Default)
         )
 
         // Interactors
@@ -119,7 +126,11 @@ class App : Application() {
             registrationConfirmDataToDomainMapper
         )
         val splashInteractor = SplashInteractor.Base(authRepository)
-        val loginInteractor = LoginInteractor.Base(authRepository)
+        val loginInteractor = LoginInteractor.Base(
+            authRepository,
+            loginDataToDomainMapper,
+            loginDomainToAuthStatusDomainMapper
+        )
 
         // ViewModels
         institutionsViewModel = InstitutionsViewModel(institutionInteractor, institutionDomainToWithCoursesUiMapper)
@@ -132,7 +143,11 @@ class App : Application() {
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
         splashViewModel = SplashViewModel(splashInteractor)
         registerViewModel = RegisterViewModel(registerInteractor, editTextStatusDomainToUiMapper, resourceManager)
-        loginViewModel = LoginViewModel(loginInteractor, editTextStatusDomainToUiMapper)
+        loginViewModel = LoginViewModel(
+            loginInteractor,
+            editTextStatusDomainToUiMapper,
+            authStatusDomainToUiMapper
+        )
     }
 
     val Context.dataStore by preferencesDataStore(DATASTORE_NAME)

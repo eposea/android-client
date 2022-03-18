@@ -5,17 +5,24 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
+import java.io.IOException
 
 interface DataStoreRepository {
 
-    suspend fun fetchToken(): String
-    suspend fun saveToken(token: String)
+    interface Token : DataStoreRepository {
+        suspend fun fetchToken(): String?
+        suspend fun saveToken(token: String)
+    }
 
-    class Base(
+    class TokenDataStoreRepository(
         private val dataStore: DataStore<Preferences>
-    ) : DataStoreRepository {
+    ) : Token {
 
-        override suspend fun fetchToken() = dataStore.data.first()[USER_TOKEN] ?: ""
+        override suspend fun fetchToken() = try {
+            dataStore.data.first()[USER_TOKEN]
+        } catch (e: IOException) {
+            null
+        }
 
         override suspend fun saveToken(token: String) {
             dataStore.edit { settings ->

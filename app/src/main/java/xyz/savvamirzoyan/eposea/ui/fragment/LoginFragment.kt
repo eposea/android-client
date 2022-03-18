@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.collect
+import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.CoreTextWatcher
 import xyz.savvamirzoyan.eposea.databinding.FragmentLoginBinding
+import xyz.savvamirzoyan.eposea.extension.snackbar
 import xyz.savvamirzoyan.eposea.ui.activity.AuthActivity
+import xyz.savvamirzoyan.eposea.ui.model.AuthStatusUi
 import xyz.savvamirzoyan.eposea.ui.viewmodel.LoginViewModel
 
 class LoginFragment : CoreFragment<AuthActivity, LoginViewModel>() {
@@ -32,6 +35,7 @@ class LoginFragment : CoreFragment<AuthActivity, LoginViewModel>() {
         launchCoroutine { setEmailEditTextStateListener() }
         launchCoroutine { setPasswordEditTextStateListener() }
         launchCoroutine { setLoginButtonStateListener() }
+        launchCoroutine { setAuthStatusListener() }
 
         return binding.root
     }
@@ -89,6 +93,16 @@ class LoginFragment : CoreFragment<AuthActivity, LoginViewModel>() {
     private suspend fun setLoginButtonStateListener() {
         viewModel.isLoginButtonEnabledFlow.collect {
             binding.buttonLogin.isEnabled = it
+        }
+    }
+
+    @ExperimentalSerializationApi
+    private suspend fun setAuthStatusListener() {
+        viewModel.authStatusFlow.collect {
+            when (it) {
+                is AuthStatusUi.Fail -> snackbar(it.message)
+                AuthStatusUi.Success -> act.startApp()
+            }
         }
     }
 }

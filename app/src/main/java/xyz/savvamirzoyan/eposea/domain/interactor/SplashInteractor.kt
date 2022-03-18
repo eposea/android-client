@@ -20,6 +20,7 @@ interface SplashInteractor {
         override suspend fun checkToken() {
             val value = authRepository.checkToken()
             _isLoggedInStateFlow.emit(value)
+            _isLoggedInStateFlow.emit(null) // to drop last (aka cached) value
         }
     }
 }

@@ -1,11 +1,11 @@
 package xyz.savvamirzoyan.eposea.domain.interactor
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.*
 import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
+import xyz.savvamirzoyan.eposea.domain.mapper.LoginDataToDomainMapper
+import xyz.savvamirzoyan.eposea.domain.mapper.LoginDomainToAuthStatusDomainMapper
+import xyz.savvamirzoyan.eposea.domain.model.AuthStatusDomain
 import xyz.savvamirzoyan.eposea.domain.model.EditTextStatusDomain
 
 interface LoginInteractor {
@@ -13,13 +13,16 @@ interface LoginInteractor {
     val emailEditTextStateFlow: StateFlow<EditTextStatusDomain>
     val passwordEditTextStateFlow: StateFlow<EditTextStatusDomain>
     val isLoginButtonEnabledStateFlow: Flow<Boolean>
+    val resultStatus: Flow<AuthStatusDomain>
 
     suspend fun onEmailChange(email: String)
     suspend fun onPasswordChange(password: String)
     suspend fun login(email: String, password: String)
 
     class Base(
-        private val authRepository: AuthRepository
+        private val authRepository: AuthRepository,
+        private val loginDataToDomainMapper: LoginDataToDomainMapper,
+        private val loginDomainToAuthStatusDomainMapper: LoginDomainToAuthStatusDomainMapper
     ) : LoginInteractor {
 
         private val standardEmailEditTextStatus = EditTextStatusDomain()
@@ -40,6 +43,9 @@ interface LoginInteractor {
                 isEmailValid && isPasswordValid
             }
 
+        private val _resultStatus = MutableSharedFlow<AuthStatusDomain>()
+        override val resultStatus: Flow<AuthStatusDomain> = _resultStatus
+
         override suspend fun onEmailChange(email: String) {
 
             val isEmailValid = authRepository.isEmailValid(email)
@@ -58,7 +64,9 @@ interface LoginInteractor {
         }
 
         override suspend fun login(email: String, password: String) {
-            authRepository.login(email, password)
+            val loginDomain = loginDataToDomainMapper.map(authRepository.login(email, password))
+            val authStatusDomain = loginDomainToAuthStatusDomainMapper.map(loginDomain)
+            _resultStatus.emit(authStatusDomain)
         }
     }
 }
