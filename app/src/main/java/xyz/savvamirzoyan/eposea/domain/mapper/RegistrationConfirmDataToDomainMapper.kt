@@ -14,8 +14,10 @@ interface RegistrationConfirmDataToDomainMapper : Mapper<RegistrationConfirmData
     ) : RegistrationConfirmDataToDomainMapper {
 
         override fun map(model: RegistrationConfirmData) = when (model) {
-            is RegistrationConfirmData.Base -> RegistrationConfirmDomain.Success
+            is RegistrationConfirmData.Success -> RegistrationConfirmDomain.Success
             is RegistrationConfirmData.Error -> RegistrationConfirmDomain.Error(errorDataToDomainMapper.mapError(model.error))
+            RegistrationConfirmData.NotAuthorized -> RegistrationConfirmDomain.NotAuthorized
+            RegistrationConfirmData.ServerError -> RegistrationConfirmDomain.ServerError
         }
     }
 }

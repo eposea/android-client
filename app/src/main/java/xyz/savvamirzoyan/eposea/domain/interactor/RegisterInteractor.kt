@@ -6,9 +6,10 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.data.repository.AuthRepository
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationConfirmDataToDomainMapper
+import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationConfirmDomainToAuthStatusDomainMapper
 import xyz.savvamirzoyan.eposea.domain.mapper.RegistrationDataToDomainMapper
+import xyz.savvamirzoyan.eposea.domain.model.AuthStatusDomain
 import xyz.savvamirzoyan.eposea.domain.model.EditTextStatusDomain
 import xyz.savvamirzoyan.eposea.domain.model.RegistrationConfirmDomain
 import xyz.savvamirzoyan.eposea.domain.model.RegistrationDomain
@@ -23,7 +24,7 @@ interface RegisterInteractor {
     val isSignUpButtonVisibleFlow: StateFlow<Boolean>
     val isProgressSignUpVisibleFlow: StateFlow<Boolean>
     val errorMessageIdFlow: SharedFlow<Int>
-    val isUserLoggedInFlow: SharedFlow<Unit>
+    val resultStatusFlow: SharedFlow<AuthStatusDomain>
 
     suspend fun validateCredentials(email: String, password: String, passwordRepeat: String)
     suspend fun signUp(email: String, password: String)
@@ -32,7 +33,8 @@ interface RegisterInteractor {
     class Base(
         private val authRepository: AuthRepository,
         private val registrationDataToDomainMapper: RegistrationDataToDomainMapper,
-        private val registrationConfirmDataToDomainMapper: RegistrationConfirmDataToDomainMapper
+        private val registrationConfirmDataToDomainMapper: RegistrationConfirmDataToDomainMapper,
+        private val registrationConfirmDomainToAuthStatusDomainMapper: RegistrationConfirmDomainToAuthStatusDomainMapper
     ) : RegisterInteractor {
 
         private val emailStandardStatus = EditTextStatusDomain()
@@ -63,8 +65,8 @@ interface RegisterInteractor {
         private val _errorMessageIdFlow = MutableSharedFlow<Int>()
         override val errorMessageIdFlow: SharedFlow<Int> = _errorMessageIdFlow
 
-        private val _isUserLoggedInFlow = MutableSharedFlow<Unit>()
-        override val isUserLoggedInFlow: SharedFlow<Unit> = _isUserLoggedInFlow
+        private val _resultStatusFlow = MutableSharedFlow<AuthStatusDomain>()
+        override val resultStatusFlow: SharedFlow<AuthStatusDomain> = _resultStatusFlow
 
         override suspend fun validateCredentials(email: String, password: String, passwordRepeat: String) {
 
@@ -108,7 +110,7 @@ interface RegisterInteractor {
             _isSignUpButtonVisibleFlow.emit(false)
             _isProgressSignUpVisibleFlow.emit(true)
 
-            val registrationDomain =
+            val registrationDomain: RegistrationDomain =
                 registrationDataToDomainMapper.map(authRepository.sendRegisterCredentials(email, password))
 
             _isProgressSignUpVisibleFlow.emit(false)
@@ -120,23 +122,17 @@ interface RegisterInteractor {
 
                 is RegistrationDomain.Error -> {
                     _isSignUpButtonVisibleFlow.emit(true)
-
-                    val errorMessageId = when (registrationDomain.error) {
-                        is ErrorDomain.ApiError -> R.string.error_api
-                        is ErrorDomain.OtherError -> R.string.error
-                    }
-
-                    _errorMessageIdFlow.emit(errorMessageId)
+                    _errorMessageIdFlow.emit(registrationDomain.message)
                 }
             }
         }
 
         override suspend fun sendVerificationCode(verificationCode: String) {
-            val registrationConfirmDomain = registrationConfirmDataToDomainMapper
+            val registrationConfirmDomain: RegistrationConfirmDomain = registrationConfirmDataToDomainMapper
                 .map(authRepository.sendConfirmationCode(verificationCode))
-            if (registrationConfirmDomain is RegistrationConfirmDomain.Success) {
-                _isUserLoggedInFlow.emit(Unit)
-            }
+
+            val authStatusDomain = registrationConfirmDomainToAuthStatusDomainMapper.map(registrationConfirmDomain)
+            _resultStatusFlow.emit(authStatusDomain)
         }
 
         private fun isPasswordRepeatInvalid(passwordRepeat: String, password: String) =

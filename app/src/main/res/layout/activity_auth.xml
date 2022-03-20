@@ -20,5 +20,5 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/auth_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp" />
 </LinearLayout>

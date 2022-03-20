@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import xyz.savvamirzoyan.eposea.domain.interactor.RegisterInteractor
+import xyz.savvamirzoyan.eposea.domain.mapper.AuthStatusDomainToUiMapper
 import xyz.savvamirzoyan.eposea.extension.mapVisibility
 import xyz.savvamirzoyan.eposea.ui.ResourceManager
 import xyz.savvamirzoyan.eposea.ui.mapper.EditTextStatusDomainToUiMapper
@@ -15,6 +16,7 @@ import xyz.savvamirzoyan.eposea.ui.model.EditTextStatusUi
 class RegisterViewModel(
     private val registerInteractor: RegisterInteractor,
     private val editTextStatusDomainToUiMapper: EditTextStatusDomainToUiMapper,
+    private val authStatusDomainToUiMapper: AuthStatusDomainToUiMapper,
     private val resourceManager: ResourceManager
 ) : CoreViewModel() {
 
@@ -49,7 +51,8 @@ class RegisterViewModel(
     val errorMessageFlow: Flow<String> = registerInteractor.errorMessageIdFlow
         .map { resourceManager.getString(it) }
 
-    val isLoggedInSharedFlow = registerInteractor.isUserLoggedInFlow
+    val authStatusFlow = registerInteractor.resultStatusFlow
+        .map { authStatusDomainToUiMapper.map(it) }
 
     private val _isSendCodeButtonEnabledFlow = MutableStateFlow(false)
     val isSendCodeButtonEnabledFlow: StateFlow<Boolean> = _isSendCodeButtonEnabledFlow

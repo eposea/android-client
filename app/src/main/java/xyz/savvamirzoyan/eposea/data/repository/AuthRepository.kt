@@ -7,7 +7,6 @@ import xyz.savvamirzoyan.eposea.core.CoreActor
 import xyz.savvamirzoyan.eposea.data.mapper.LoginCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.mapper.RegistrationCloudToDataMapper
 import xyz.savvamirzoyan.eposea.data.mapper.RegistrationConfirmCloudToDataMapper
-import xyz.savvamirzoyan.eposea.data.model.cloud.RegistrationCloud
 import xyz.savvamirzoyan.eposea.data.model.data.LoginData
 import xyz.savvamirzoyan.eposea.data.model.data.RegistrationConfirmData
 import xyz.savvamirzoyan.eposea.data.model.data.RegistrationData
@@ -36,15 +35,24 @@ interface AuthRepository {
         private var tmpToken = CoreActor<String>(coroutineScope)
 
         override suspend fun sendRegisterCredentials(email: String, password: String): RegistrationData = try {
-            val response: RegistrationCloud = authService.register(email, password)
-            tmpToken.set(response.tmpToken!!)
+            val response = authService.register(email, password)
+
+            if (response.isSuccessful)
+                tmpToken.set(response.body()!!.tmpToken!!)
+
             registrationCloudToDataMapper.map(response)
         } catch (e: Exception) {
             registrationCloudToDataMapper.map(e)
         }
 
         override suspend fun sendConfirmationCode(code: String): RegistrationConfirmData = try {
-            registrationConfirmCloudToDataMapper.map(authService.registerProof(tmpToken.get()!!, code))
+            val response = authService.registerProof(tmpToken.get()!!, code)
+            val registrationConfirmData = registrationConfirmCloudToDataMapper.map(response)
+
+            if (response.isSuccessful && registrationConfirmData is RegistrationConfirmData.Success)
+                tokenDataStoreRepository.saveToken(registrationConfirmData.token)
+
+            registrationConfirmData
         } catch (e: Exception) {
             registrationConfirmCloudToDataMapper.map(e)
         }
@@ -53,12 +61,12 @@ interface AuthRepository {
 
         override suspend fun login(email: String, password: String) = try {
             val response = authService.login(email, password)
+            val loginData = loginCloudToDataMapper.map(response)
 
-            if (response.isSuccessful && response.body()?.token != null) {
+            if (loginData is LoginData.Success)
                 tokenDataStoreRepository.saveToken(response.body()!!.token)
-            }
 
-            loginCloudToDataMapper.map(response)
+            loginData
         } catch (e: Exception) {
             loginCloudToDataMapper.map(e)
         }

@@ -21,13 +21,13 @@ interface AuthService {
     suspend fun register(
         @Query("email") email: String,
         @Query("password") password: String
-    ): RegistrationCloud
+    ): Response<RegistrationCloud>
 
     @POST("register/proof")
     suspend fun registerProof(
         @Query("tmp_token") tmpToken: String,
         @Query("code") code: String
-    ): RegistrationConfirmCloud
+    ): Response<RegistrationConfirmCloud>
 
     @GET("checkToken")
     suspend fun checkToken(

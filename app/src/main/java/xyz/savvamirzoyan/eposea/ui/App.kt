@@ -10,6 +10,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import xyz.savvamirzoyan.eposea.BuildConfig
 import xyz.savvamirzoyan.eposea.core.ExceptionMapper
@@ -53,7 +54,9 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val client = OkHttpClient.Builder().build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .build()
         val contentType = "application/json".toMediaType()
         val converterFactory = json.asConverterFactory(contentType)
         val retrofit = Retrofit.Builder()
@@ -91,12 +94,13 @@ class App : Application() {
         val editTextStatusDomainToUiMapper = EditTextStatusDomainToUiMapper.Base(resourceManager)
         val registrationCloudToDataMapper = RegistrationCloudToDataMapper.Base(exceptionMapper)
         val registrationConfirmCloudToDataMapper = RegistrationConfirmCloudToDataMapper.Base(exceptionMapper)
-        val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base(errorDataToDomainMapper)
+        val registrationDataToDomainMapper = RegistrationDataToDomainMapper.Base()
         val registrationConfirmDataToDomainMapper = RegistrationConfirmDataToDomainMapper.Base(errorDataToDomainMapper)
         val loginCloudToDataMapper = LoginCloudToDataMapper.Base(exceptionMapper)
         val loginDataToDomainMapper = LoginDataToDomainMapper.Base()
         val loginDomainToAuthStatusDomainMapper = LoginDomainToAuthStatusDomainMapper.Base()
         val authStatusDomainToUiMapper = AuthStatusDomainToUiMapper.Base(resourceManager)
+        val registrationConfirmDomainToAuthStatusDomainMapper = RegistrationConfirmDomainToAuthStatusDomainMapper.Base()
 
         // Repository
         val tokenDataStoreRepository = DataStoreRepository.TokenDataStoreRepository(dataStore)
@@ -123,7 +127,8 @@ class App : Application() {
         val registerInteractor = RegisterInteractor.Base(
             authRepository,
             registrationDataToDomainMapper,
-            registrationConfirmDataToDomainMapper
+            registrationConfirmDataToDomainMapper,
+            registrationConfirmDomainToAuthStatusDomainMapper
         )
         val splashInteractor = SplashInteractor.Base(authRepository)
         val loginInteractor = LoginInteractor.Base(
@@ -142,7 +147,12 @@ class App : Application() {
         )
         coursesViewModel = CoursesViewModel(coursesInteractor, courseDomainToUiMapper)
         splashViewModel = SplashViewModel(splashInteractor)
-        registerViewModel = RegisterViewModel(registerInteractor, editTextStatusDomainToUiMapper, resourceManager)
+        registerViewModel = RegisterViewModel(
+            registerInteractor,
+            editTextStatusDomainToUiMapper,
+            authStatusDomainToUiMapper,
+            resourceManager
+        )
         loginViewModel = LoginViewModel(
             loginInteractor,
             editTextStatusDomainToUiMapper,
@@ -150,5 +160,5 @@ class App : Application() {
         )
     }
 
-    val Context.dataStore by preferencesDataStore(DATASTORE_NAME)
+    private val Context.dataStore by preferencesDataStore(DATASTORE_NAME)
 }

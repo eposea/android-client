@@ -26,4 +26,5 @@
     <string name="password_error_must_match">Passwords must match</string>
     <string name="no_error_message">No error message</string>
     <string name="not_authorized">Not authorized. Your input may be wrong 😥</string>
+    <string name="invalid_code_from_email">Code from e-mail is not correct</string>
 </resources>

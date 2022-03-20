@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.flow.collect
+import kotlinx.serialization.ExperimentalSerializationApi
 import xyz.savvamirzoyan.eposea.core.CoreTextWatcher
 import xyz.savvamirzoyan.eposea.databinding.FragmentRegisterBinding
 import xyz.savvamirzoyan.eposea.extension.snackbar
 import xyz.savvamirzoyan.eposea.ui.activity.AuthActivity
+import xyz.savvamirzoyan.eposea.ui.model.AuthStatusUi
 import xyz.savvamirzoyan.eposea.ui.viewmodel.RegisterViewModel
 
 class RegisterFragment : CoreFragment<AuthActivity, RegisterViewModel>() {
@@ -41,6 +43,7 @@ class RegisterFragment : CoreFragment<AuthActivity, RegisterViewModel>() {
         launchCoroutine { setIsSendCodeButtonEnabledStateListener() }
         launchCoroutine { setIsProgressSignUpVisibleStateListener() }
         launchCoroutine { setErrorMessageStateListener() }
+        launchCoroutine { setAuthStatusListener() }
 
         return binding.root
     }
@@ -152,6 +155,16 @@ class RegisterFragment : CoreFragment<AuthActivity, RegisterViewModel>() {
     private suspend fun setErrorMessageStateListener() {
         viewModel.errorMessageFlow.collect {
             snackbar(it)
+        }
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private suspend fun setAuthStatusListener() {
+        viewModel.authStatusFlow.collect {
+            when (it) {
+                is AuthStatusUi.Fail -> snackbar(it.message)
+                AuthStatusUi.Success -> act.startApp()
+            }
         }
     }
 }

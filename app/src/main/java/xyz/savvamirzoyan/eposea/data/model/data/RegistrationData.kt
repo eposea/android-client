@@ -4,7 +4,8 @@ import xyz.savvamirzoyan.eposea.core.Model
 import xyz.savvamirzoyan.eposea.data.error.ErrorData
 
 sealed class RegistrationData : Model.Data {
-
-    class Base(val tmpToken: String) : RegistrationData()
-    class Error(val error: ErrorData) : RegistrationData()
+    data class Success(val tmpToken: String) : RegistrationData()
+    data class Error(val error: ErrorData) : RegistrationData()
+    object NotAuthorized : RegistrationData()
+    object ServerError : RegistrationData()
 }
