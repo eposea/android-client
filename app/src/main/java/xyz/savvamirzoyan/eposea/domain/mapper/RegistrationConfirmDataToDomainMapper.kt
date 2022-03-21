@@ -12,7 +12,6 @@ interface RegistrationConfirmDataToDomainMapper : Mapper<RegistrationConfirmData
     class Base(
         private val errorDataToDomainMapper: ExceptionMapper.BaseErrorDataToDomainMapper
     ) : RegistrationConfirmDataToDomainMapper {
-
         override fun map(model: RegistrationConfirmData) = when (model) {
             is RegistrationConfirmData.Success -> RegistrationConfirmDomain.Success
             is RegistrationConfirmData.Error -> RegistrationConfirmDomain.Error(errorDataToDomainMapper.mapError(model.error))

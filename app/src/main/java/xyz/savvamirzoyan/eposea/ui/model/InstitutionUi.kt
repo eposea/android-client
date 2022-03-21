@@ -15,6 +15,6 @@ sealed class InstitutionUi : Model.Ui {
         val initials: String
     ) : InstitutionUi()
 
-    data class Error(val error: String, val errorMessage: String) : InstitutionUi()
+    data class Error(val error: String) : InstitutionUi()
     object Loading : InstitutionUi()
 }

@@ -1,11 +1,11 @@
 package xyz.savvamirzoyan.eposea.domain.mapper
 
+import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.core.Mapper
 import xyz.savvamirzoyan.eposea.data.error.ErrorData
 import xyz.savvamirzoyan.eposea.data.model.data.InstitutionInfoData
 import xyz.savvamirzoyan.eposea.data.model.data.InstitutionInfoSectionData
 import xyz.savvamirzoyan.eposea.data.model.data.InstitutionInfoSectionItemData
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 import xyz.savvamirzoyan.eposea.domain.model.InstitutionInfoDomain
 import xyz.savvamirzoyan.eposea.domain.model.InstitutionInfoSectionDomain
 import xyz.savvamirzoyan.eposea.domain.model.InstitutionInfoSectionItemDomain
@@ -24,24 +24,9 @@ interface InstitutionInfoDataToDomainMapper : Mapper<InstitutionInfoData, Instit
                 sections = model.sections.map { map(it) })
             is InstitutionInfoData.Error -> {
                 when (model.error) {
-                    is ErrorData.ApiError -> InstitutionInfoDomain.Error(
-                        ErrorDomain.ApiError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
-                    is ErrorData.NetworkError -> InstitutionInfoDomain.Error(
-                        ErrorDomain.ApiError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
-                    is ErrorData.OtherError -> InstitutionInfoDomain.Error(
-                        ErrorDomain.OtherError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
+                    is ErrorData.ApiError -> InstitutionInfoDomain.Error(R.string.error_api)
+                    is ErrorData.NetworkError -> InstitutionInfoDomain.Error(R.string.error_api)
+                    is ErrorData.OtherError -> InstitutionInfoDomain.Error(R.string.error_other)
                 }
             }
         }

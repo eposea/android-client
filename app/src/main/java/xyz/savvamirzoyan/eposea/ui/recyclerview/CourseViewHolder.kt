@@ -34,7 +34,6 @@ sealed class CourseViewHolder(view: View) : CoreViewHolder<CourseUi>(view) {
 
         override fun bind(item: CourseUi.Error) {
             binding.textViewErrorText.text = item.error
-            binding.textViewErrorStackTrace.text = item.errorMessage
             binding.buttonRetry.setOnClickListener { retry.onRetry() }
         }
     }

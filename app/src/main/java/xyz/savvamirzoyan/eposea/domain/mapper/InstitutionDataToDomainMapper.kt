@@ -1,9 +1,9 @@
 package xyz.savvamirzoyan.eposea.domain.mapper
 
+import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.core.Mapper
 import xyz.savvamirzoyan.eposea.data.error.ErrorData
 import xyz.savvamirzoyan.eposea.data.model.data.InstitutionData
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 import xyz.savvamirzoyan.eposea.domain.model.InstitutionDomain
 
 interface InstitutionDataToDomainMapper : Mapper<InstitutionData, InstitutionDomain> {
@@ -19,24 +19,9 @@ interface InstitutionDataToDomainMapper : Mapper<InstitutionData, InstitutionDom
             }
             is InstitutionData.Error -> {
                 when (model.error) {
-                    is ErrorData.ApiError -> InstitutionDomain.Error(
-                        ErrorDomain.ApiError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
-                    is ErrorData.NetworkError -> InstitutionDomain.Error(
-                        ErrorDomain.ApiError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
-                    is ErrorData.OtherError -> InstitutionDomain.Error(
-                        ErrorDomain.OtherError(
-                            model.error,
-                            model.error.errorMessage
-                        )
-                    )
+                    is ErrorData.ApiError -> InstitutionDomain.Error(R.string.error_api)
+                    is ErrorData.NetworkError -> InstitutionDomain.Error(R.string.error_api)
+                    is ErrorData.OtherError -> InstitutionDomain.Error(R.string.error_other)
                 }
             }
         }

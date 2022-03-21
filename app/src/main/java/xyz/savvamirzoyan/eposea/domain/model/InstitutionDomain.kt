@@ -1,7 +1,7 @@
 package xyz.savvamirzoyan.eposea.domain.model
 
+import androidx.annotation.StringRes
 import xyz.savvamirzoyan.eposea.core.Model
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 
 sealed class InstitutionDomain : Model.Domain {
 
@@ -11,5 +11,5 @@ sealed class InstitutionDomain : Model.Domain {
         val imageUrl: String?
     ) : InstitutionDomain()
 
-    data class Error(val error: ErrorDomain) : InstitutionDomain()
+    data class Error(@StringRes val message: Int) : InstitutionDomain()
 }

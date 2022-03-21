@@ -2,7 +2,6 @@ package xyz.savvamirzoyan.eposea.ui.mapper
 
 import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.core.Mapper
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 import xyz.savvamirzoyan.eposea.domain.model.InstitutionInfoDomain
 import xyz.savvamirzoyan.eposea.ui.ResourceManager
 import xyz.savvamirzoyan.eposea.ui.model.InstitutionInfoUi
@@ -39,16 +38,7 @@ interface InstitutionInfoDomainToUiMapper : Mapper<InstitutionInfoDomain, Instit
                 result
             }
             is InstitutionInfoDomain.Error -> listOf(
-                when (model.error) {
-                    is ErrorDomain.ApiError -> InstitutionInfoUi.Error(
-                        resourceManager.getString(R.string.error_api),
-                        model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
-                    )
-                    is ErrorDomain.OtherError -> InstitutionInfoUi.Error(
-                        resourceManager.getString(R.string.error),
-                        model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
-                    )
-                }
+                InstitutionInfoUi.Error(resourceManager.getString(model.message))
             )
         }
     }

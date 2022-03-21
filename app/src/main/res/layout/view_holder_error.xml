@@ -22,16 +22,6 @@
         android:textAlignment="center"
         tools:text="Error text to tell user something bad in app happened" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_errorStackTrace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_xxxl"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:textAlignment="center"
-        android:textColor="?attr/errorTextColor"
-        tools:text="Failed to connect to example.com" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_retry"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"

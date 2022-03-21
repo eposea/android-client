@@ -11,7 +11,6 @@ interface RegistrationDataToDomainMapper : Mapper<RegistrationData, Registration
     fun map(model: RegistrationData): RegistrationDomain
 
     class Base : RegistrationDataToDomainMapper {
-
         override fun map(model: RegistrationData) = when (model) {
             is RegistrationData.Success -> RegistrationDomain.Base
             is RegistrationData.Error -> {
@@ -22,7 +21,7 @@ interface RegistrationDataToDomainMapper : Mapper<RegistrationData, Registration
                 }
             }
             RegistrationData.NotAuthorized -> RegistrationDomain.Error(R.string.not_authorized)
-            RegistrationData.ServerError -> RegistrationDomain.Base
+            RegistrationData.ServerError -> RegistrationDomain.Error(R.string.error_api)
         }
     }
 }

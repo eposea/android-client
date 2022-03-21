@@ -61,7 +61,6 @@ sealed class InstitutionsViewHolder(view: View) : CoreViewHolder<InstitutionUi>(
 
         override fun bind(item: InstitutionUi.Error) {
             binding.textViewErrorText.text = item.error
-            binding.textViewErrorStackTrace.text = item.errorMessage
             binding.buttonRetry.setOnClickListener { retry.onRetry() }
         }
     }

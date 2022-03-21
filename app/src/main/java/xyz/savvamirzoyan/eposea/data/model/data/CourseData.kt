@@ -5,13 +5,13 @@ import xyz.savvamirzoyan.eposea.data.error.ErrorData
 
 sealed class CourseData : Model.Data {
 
-    class Base(
+    data class Base(
         val id: String,
         val title: String,
         val description: String
     ) : CourseData()
 
-    class Error(
+    data class Error(
         val error: ErrorData
     ) : CourseData()
 }

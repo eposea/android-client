@@ -1,8 +1,6 @@
 package xyz.savvamirzoyan.eposea.ui.mapper
 
-import xyz.savvamirzoyan.eposea.R
 import xyz.savvamirzoyan.eposea.core.Mapper
-import xyz.savvamirzoyan.eposea.domain.error.ErrorDomain
 import xyz.savvamirzoyan.eposea.domain.model.CourseDomain
 import xyz.savvamirzoyan.eposea.ui.ResourceManager
 import xyz.savvamirzoyan.eposea.ui.model.CourseUi
@@ -21,16 +19,7 @@ interface CourseDomainToUiMapper : Mapper<CourseDomain, CourseUi> {
                 title = model.title,
                 teachers = model.teachers.joinToString(", ")
             )
-            is CourseDomain.Error -> when (model.error) {
-                is ErrorDomain.ApiError -> CourseUi.Error(
-                    resourceManager.getString(R.string.error_api),
-                    model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
-                )
-                is ErrorDomain.OtherError -> CourseUi.Error(
-                    resourceManager.getString(R.string.error),
-                    model.error.errorMessage ?: resourceManager.getString(R.string.no_error_message)
-                )
-            }
+            is CourseDomain.Error -> CourseUi.Error(resourceManager.getString(model.message))
         }
     }
 }
