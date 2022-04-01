@@ -15,6 +15,7 @@ import xyz.savvamirzoyan.eposea.ui.activity.AuthActivity
 import xyz.savvamirzoyan.eposea.ui.model.AuthStatusUi
 import xyz.savvamirzoyan.eposea.ui.viewmodel.LoginViewModel
 
+@ExperimentalSerializationApi
 class LoginFragment : CoreFragment<AuthActivity, LoginViewModel>() {
 
     private lateinit var binding: FragmentLoginBinding

@@ -17,8 +17,8 @@ interface CoursesInteractor {
         override suspend fun fetchCourses(): List<CourseDomain> {
             // TODO: Define logic of 'main' institution
             // for now it would be just the first university
-            val coursesDomain = coursesRepository.fetchCourses("TEST-1")
-            return courseDataToDomainMapper.map(coursesDomain)
+            val coursesDomain = coursesRepository.fetchCourses("cxidtq_qxlyrzxo_39164")
+            return courseDataToDomainMapper.map(coursesDomain + coursesDomain + coursesDomain)
         }
 
         override suspend fun fetchInstitutionTitle(): String {

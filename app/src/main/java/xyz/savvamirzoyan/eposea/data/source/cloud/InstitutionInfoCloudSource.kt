@@ -6,6 +6,6 @@ import xyz.savvamirzoyan.eposea.data.model.cloud.InstitutionInfoCloud
 
 interface InstitutionInfoCloudSource {
 
-    @GET("institutions/{institutionId}")
+    @GET("aggregator/institutions/{institutionId}")
     suspend fun fetchInstitutionInfo(@Path("institutionId") institutionId: String): InstitutionInfoCloud
 }

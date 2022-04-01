@@ -6,6 +6,6 @@ import xyz.savvamirzoyan.eposea.data.model.cloud.CoursesCloud
 
 interface CourseCloudSource {
 
-    @GET("institutions/{institutionId}")
+    @GET("aggregator/institutions/{institutionId}")
     suspend fun fetchCourses(@Path("institutionId") institutionId: String): CoursesCloud
 }

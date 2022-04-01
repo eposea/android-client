@@ -23,11 +23,8 @@ class CoursesRecyclerView(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        TYPE_COURSE ->
-            CourseViewHolder.Base(R.layout.view_holder_course.makeView(parent))
-        TYPE_LOADING ->
-            CourseViewHolder.Loading(R.layout.view_holder_loading.makeView(parent))
-        else ->
-            CourseViewHolder.Error(retry, R.layout.view_holder_error.makeView(parent))
+        TYPE_COURSE -> CourseViewHolder.Base(R.layout.view_holder_course.makeView(parent))
+        TYPE_LOADING -> CourseViewHolder.Loading(R.layout.view_holder_loading.makeView(parent))
+        else -> CourseViewHolder.Error(retry, R.layout.view_holder_error.makeView(parent))
     }
 }

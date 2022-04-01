@@ -1,24 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.Eposeaandroid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/indigo_A700</item>
-        <item name="colorPrimaryVariant">@color/indigo_A100</item>
-        <item name="colorPrimaryDark">@color/indigo_800</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/light_yellow_A100</item>
-        <item name="colorSecondaryVariant">@color/light_yellow_400</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="errorTextColor">@color/red_A200</item>
-    </style>
-
-    <style name="ColoredIcon">
-        <item name="android:tint">?attr/colorPrimaryDark</item>
+    <style name="Theme.Eposeaandroid" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/material_dynamic_primary100</item>
     </style>
 
     <style name="RoundedImage">
@@ -27,20 +11,10 @@
     </style>
 
     <style name="DrawableTextView" parent="Widget.AppCompat.TextView">
-        <item name="drawableTint">?attr/colorPrimaryDark</item>
         <item name="drawableTintMode">multiply</item>
     </style>
 
     <style name="DrawableTextViewError" parent="Widget.AppCompat.TextView">
-        <item name="drawableTint">?attr/colorError</item>
         <item name="drawableTintMode">multiply</item>
-    </style>
-
-    <style name="CollapsingToolbar.Expanded" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-    </style>
-
-    <style name="CollapsingToolbar.Collapsed" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 </resources>

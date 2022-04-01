@@ -13,7 +13,5 @@ class ResourceManagerTest : ResourceManager {
         else -> stringId.toString()
     }
 
-    override fun getString(stringId: Int, vararg params: Any): String {
-        TODO("Not yet implemented")
-    }
+    override fun getString(stringId: Int, vararg params: Any): String = getString(stringId)
 }

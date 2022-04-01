@@ -24,7 +24,6 @@ interface ExceptionMapper {
             is HttpException -> ErrorData.NetworkError(exception, exception.message)
             is SerializationException -> ErrorData.ApiError(exception, exception.message)
             else -> ErrorData.OtherError(exception, exception.message)
-
         }
     }
 

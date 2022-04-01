@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_standard"
@@ -16,10 +17,10 @@
         android:orientation="vertical">
 
         <ImageView
-            android:importantForAccessibility="no"
             android:id="@+id/imageView_institutionLogo"
             android:layout_width="match_parent"
             android:layout_height="168dp"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background" />
 
