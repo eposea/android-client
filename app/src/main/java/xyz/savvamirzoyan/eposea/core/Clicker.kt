@@ -1,5 +1,5 @@
 package xyz.savvamirzoyan.eposea.core
 
-interface Clicker<T> {
+fun interface Clicker<T> {
     fun onClick(item: T)
 }

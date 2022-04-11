@@ -1,5 +1,5 @@
 package xyz.savvamirzoyan.eposea.core
 
-interface Retry {
+fun interface Retry {
     fun onRetry()
 }

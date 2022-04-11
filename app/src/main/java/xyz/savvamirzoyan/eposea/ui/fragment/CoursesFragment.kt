@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.ExperimentalSerializationApi
-import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentCoursesBinding
 import xyz.savvamirzoyan.eposea.ui.activity.MainActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.CoursesDiffUtil
@@ -29,11 +28,7 @@ class CoursesFragment : CoreFragment<MainActivity, CoursesViewModel>() {
         viewModel = app.coursesViewModel
 
         adapter = CoursesRecyclerView(
-            object : Retry {
-                override fun onRetry() {
-                    viewModel.fetchInfo()
-                }
-            },
+            { viewModel.fetchInfo() },
             CoursesDiffUtil()
         )
 

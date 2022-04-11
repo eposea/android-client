@@ -8,12 +8,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.ExperimentalSerializationApi
-import xyz.savvamirzoyan.eposea.core.Clicker
-import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionsBinding
 import xyz.savvamirzoyan.eposea.ui.activity.MainActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionsDiffUtil
-import xyz.savvamirzoyan.eposea.ui.model.InstitutionUi
 import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionsRecyclerView
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionsViewModel
 
@@ -32,21 +29,9 @@ class InstitutionsFragment : CoreFragment<MainActivity, InstitutionsViewModel>()
         viewModel = app.institutionsViewModel
 
         adapter = InstitutionsRecyclerView(
-            object : Retry {
-                override fun onRetry() {
-                    viewModel.onRetry()
-                }
-            },
-            object : Clicker<InstitutionUi.Base> {
-                override fun onClick(item: InstitutionUi.Base) {
-                    viewModel.onClick(item)
-                }
-            },
-            object : Clicker<InstitutionUi.BaseNoImage> {
-                override fun onClick(item: InstitutionUi.BaseNoImage) {
-                    viewModel.onClick(item)
-                }
-            },
+            { viewModel.onRetry() },
+            { item -> viewModel.onClick(item) },
+            { item -> viewModel.onClick(item) },
             InstitutionsDiffUtil()
         )
 

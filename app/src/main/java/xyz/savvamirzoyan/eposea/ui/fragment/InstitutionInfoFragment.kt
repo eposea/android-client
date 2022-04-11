@@ -10,13 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collect
 import kotlinx.serialization.ExperimentalSerializationApi
-import xyz.savvamirzoyan.eposea.core.Retry
 import xyz.savvamirzoyan.eposea.databinding.FragmentInstitutionInfoBinding
 import xyz.savvamirzoyan.eposea.ui.activity.MainActivity
 import xyz.savvamirzoyan.eposea.ui.diffutil.InstitutionInfoDiffUtil
 import xyz.savvamirzoyan.eposea.ui.recyclerview.InstitutionInfoRecyclerView
 import xyz.savvamirzoyan.eposea.ui.viewmodel.InstitutionInfoViewModel
-
 
 @OptIn(ExperimentalSerializationApi::class)
 class InstitutionInfoFragment : CoreFragment<MainActivity, InstitutionInfoViewModel>() {
@@ -34,11 +32,7 @@ class InstitutionInfoFragment : CoreFragment<MainActivity, InstitutionInfoViewMo
         viewModel = app.institutionInfoViewModel
 
         adapter = InstitutionInfoRecyclerView(
-            object : Retry {
-                override fun onRetry() {
-                    viewModel.fetchInstitutionInfo(args.institutionId)
-                }
-            },
+            { viewModel.fetchInstitutionInfo(args.institutionId) },
             InstitutionInfoDiffUtil()
         )
 
